@@ -1,0 +1,28 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <h2>Пока здесь только api, в будущем будет круто!</h2>
+    <br />
+    <h3>Schedule API:</h3>
+    <p>Все данные отсылаются в <b>JSON</b> формате</p>
+    <p>Базовый URL: <code>/api/schedule</code></p>
+    <p>Получить текущую неделю: <code>/api/schedule/getParityToday</code></p>
+    <p>Получить полный список чётных\нечётных недель на текующий семестр: <code>/api/schedule/getParityWeeks</code></p>
+    <p>Получить список групп: <code>/api/schedule/getGroupList</code></p>
+    <p>Получить список пар на всю неделю: <code>/api/schedule/even/321</code> </p>
+    <p>Получить список пар на день для определённой группы: <code>/api/schedule/odd/325/1</code></p>
+
+    <p>*even - чётная неделя, odd - нечётная неделя</p>
+    <p>*0 - Понедельник, 1 - Вторник..., 5 - Суббота, на воскресение логики нет"</p>
+</body>
+</html>
