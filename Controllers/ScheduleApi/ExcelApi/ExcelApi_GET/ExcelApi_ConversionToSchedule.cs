@@ -21,9 +21,9 @@ namespace EACA.Controllers.ExcelSchedule
                 for (int i = 0; i < row.Values.Count; i++)
                 {
                     if (row.Values[i].Count != 0)
-                        temp.WeekSchedule[j].Lessons.Add(row.Values[i][0].ToString());
+                        temp.WeekSchedule[j].Lessons.Add(new Lesson(StaticScheduleInfo.TimeLessons[i], row.Values[i][0].ToString()));
                     else
-                        temp.WeekSchedule[j].Lessons.Add(" ");
+                        temp.WeekSchedule[j].Lessons.Add(new Lesson(StaticScheduleInfo.TimeLessons[i], " "));
                 }
                 j++;
             }

@@ -9,6 +9,10 @@ namespace EACA.Models
     {
         public List<Group> Groups { get; set; } = new List<Group>();
 
+        public bool Contains(int groupId)
+        {
+            return Groups.Select(x => x.GroupId).Contains(groupId);
+        }
         public string GetCellsOfGroup(int groupId)
         {
             var result = "";

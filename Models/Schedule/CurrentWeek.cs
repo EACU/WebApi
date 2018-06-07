@@ -7,5 +7,6 @@ namespace EACA.Models
         public string StartWeek { get; set; }
         public string EndWeek { get; set; }
         public string StatusParity { get; set; }
+        public string StatusParityRus { get; set; }
     }
 }

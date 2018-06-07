@@ -22,7 +22,7 @@ namespace EACA.Controllers.ExcelSchedule
         #region GET Routers
 
         [Route("getParityToday")]
-        public CurrentWeek GetParityToday() => ParityWeeks.GetEvenOddWeekToday();
+        public CurrentWeek GetParityToday() => ParityWeeks.GetParityWeekToday();
 
         [Route("getParityWeeks")]
         public ParityWeeks GetParityWeeks() => ParityWeeks;
@@ -32,19 +32,45 @@ namespace EACA.Controllers.ExcelSchedule
 
 
         [Route("{parity}/{groupId:int}")]
-        public async Task<Schedule> GetWeekScheduleGroup(string parity, int groupId)
+        public async Task<IActionResult> GetWeekScheduleGroup(string parity, int groupId)
         {
+            if (parity.ToLower() != "even" && parity.ToLower() != "odd")
+            {
+                ModelState.AddModelError("parity param", "Некорректная чётность");
+            }
+            if (!GroupsList.Contains(groupId))
+            {
+                ModelState.AddModelError("group param", "Несуществующая группа");
+            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var schedule = await GetSchedule(parity, groupId);
 
-            return schedule;
+            return Ok(schedule);
         }
 
         [Route("{parity}/{groupId:int}/{day:int}")]
-        public async Task<DailySchedule> GetDayScheduleGroup(string parity, int groupId, int day)
+        public async Task<IActionResult> GetDayScheduleGroup(string parity, int groupId, int day)
         {
+            if (day < 0 || day > 5)
+            {
+                ModelState.AddModelError("day param", "Несуществующий день, проверьте корректость дня (от 0(понедельник) до 6(суббота))");
+            }
+            if (parity.ToLower() != "even" && parity.ToLower() != "odd")
+            {
+                ModelState.AddModelError("parity param", "Некорректная чётность");
+            }
+            if (!GroupsList.Contains(groupId))
+            {
+                ModelState.AddModelError("group param", "Несуществующая группа");
+            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+ 
             var schedule = await GetSchedule(parity, groupId);
 
-            return schedule.WeekSchedule[day];
+            return Ok(schedule.WeekSchedule[day]);
         }
         
         #endregion
@@ -77,7 +103,7 @@ namespace EACA.Controllers.ExcelSchedule
         private List<string> GenerateListRanges(string parity, int groupId)
         {
             var listRange = new List<string>();
-            foreach (var item in Week.week)
+            foreach (var item in StaticScheduleInfo.Week)
             {
                 listRange.Add(GetDayRange(parity, groupId, item.Key));
             }

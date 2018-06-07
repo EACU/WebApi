@@ -8,13 +8,12 @@ namespace EACA.Models
     public class DailySchedule
     {
         public string Day { get; set; }
-        public List<string> Lessons { get; set; } = new List<string>();
+        public List<Lesson> Lessons { get; set; } = new List<Lesson>();
 
         public DailySchedule(int day)
         {
-            Day = Week.week[day];
+            Day = StaticScheduleInfo.Week[day];
         }
-
 
     }
 }
