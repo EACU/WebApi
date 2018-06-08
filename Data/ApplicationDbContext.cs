@@ -11,6 +11,6 @@ namespace EACA.Data
         {
         }
 
-        public DbSet<Student> Customers { get; set; }
+        public DbSet<Student> Students { get; set; }
     }
 }

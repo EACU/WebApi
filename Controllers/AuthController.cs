@@ -3,6 +3,7 @@ using EACA.Helpers;
 using EACA.Models;
 using EACA.Models.Entities;
 using EACA.ViewModels;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -15,6 +16,7 @@ using System.Threading.Tasks;
 
 namespace EACA.Controllers
 {
+    [EnableCors("AllowAllOrigin")]
     [Route("api/[controller]")]
     public class AuthController : Controller
     {

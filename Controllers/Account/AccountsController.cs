@@ -38,7 +38,7 @@ namespace EACA.Controllers.Account
 
             if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
 
-            await _appDbContext.Customers.AddAsync(new Student { IdentityId = userIdentity.Id });
+            await _appDbContext.Students.AddAsync(new Student { IdentityId = userIdentity.Id });
             await _appDbContext.SaveChangesAsync();
 
             return new OkObjectResult("Аккаунт создан!");

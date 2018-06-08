@@ -15,6 +15,12 @@ using System.Text;
 using EACA.Helpers;
 using System;
 using EACA.Auth;
+using System.Net;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
+using EACA.Extension;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
 
 namespace EACA
 {
@@ -39,7 +45,11 @@ namespace EACA
 
             services.AddCors(options =>
             {
-                options.AddPolicy("AllowAllOrigin", x => x.AllowAnyOrigin());
+                options.AddPolicy("AllowAllOrigin", x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            });
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Filters.Add(new CorsAuthorizationFilterFactory("AllowAllOrigin"));
             });
 
             #region JWT AUTH
@@ -112,9 +122,7 @@ namespace EACA
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseCors(builder => builder.AllowAnyOrigin());
-
+                        
             app.UseAuthentication();
             app.UseDefaultFiles();
             app.UseStaticFiles();
