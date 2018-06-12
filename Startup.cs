@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Http;
 using EACA.Extension;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace EACA
 {
@@ -51,6 +52,8 @@ namespace EACA
             {
                 options.Filters.Add(new CorsAuthorizationFilterFactory("AllowAllOrigin"));
             });
+
+            services.TryAddTransient<IHttpContextAccessor, HttpContextAccessor>();
 
             #region JWT AUTH
             services.AddSingleton<IJwtFactory, JwtFactory>();

@@ -90,7 +90,7 @@ namespace EACA.Migrations
 
                     b.HasIndex("IdentityId");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
