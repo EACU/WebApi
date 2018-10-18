@@ -21,27 +21,42 @@ namespace EACA_API.Controllers.ExcelSchedule
 
         #region GET Routers
 
+        /// <summary>
+        /// Получение текущей недели(её четности и крайних дней)
+        /// </summary>
+        [HttpGet]
         [Route("getParityToday")]
         public CurrentWeek GetParityToday() => ParityWeeks.GetParityWeekToday();
 
+        /// <summary>
+        /// Получение всех четных\нечетных недель
+        /// </summary>
+        [HttpGet]
         [Route("getParityWeeks")]
         public ParityWeeks GetParityWeeks() => ParityWeeks;
 
+        /// <summary>
+        /// Возвращает список всех групп с привязкой листа и столбца в googlesheets
+        /// </summary>
+        [HttpGet]
         [Route("getGroupList")]
         public IEnumerable<Group> GetGroupList() => GroupsList.Groups;
 
-
+        /// <summary>
+        /// Возвращает список пар на неделю для группы
+        /// </summary>
+        /// <param name="parity">Четность недели(odd - нечетная, even - чётная)</param>
+        /// <param name="groupId">Номер группы</param>
+        [HttpGet]
         [Route("{parity}/{groupId:int}")]
         public async Task<IActionResult> GetWeekScheduleGroup(string parity, int groupId)
         {
             if (parity.ToLower() != "even" && parity.ToLower() != "odd")
-            {
                 ModelState.AddModelError("parity param", "Некорректная чётность");
-            }
+
             if (!GroupsList.Contains(groupId))
-            {
                 ModelState.AddModelError("group param", "Несуществующая группа");
-            }
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -50,6 +65,13 @@ namespace EACA_API.Controllers.ExcelSchedule
             return Ok(schedule);
         }
 
+        /// <summary>
+        /// Возвращает список пар на конкретный день для определённой группы
+        /// </summary>
+        /// <param name="parity">Четность недели(odd - нечетная, even - чётная)</param>
+        /// <param name="groupId">Номер группы</param>
+        /// <param name="day">Номер дня(0 - понедельник, 1 - вторник, ..., 6 - суббота)</param>
+        [HttpGet]
         [Route("{parity}/{groupId:int}/{day:int}")]
         public async Task<IActionResult> GetDayScheduleGroup(string parity, int groupId, int day)
         {
@@ -72,10 +94,11 @@ namespace EACA_API.Controllers.ExcelSchedule
 
             return Ok(schedule.WeekSchedule[day]);
         }
-        
+
         #endregion
 
         #region POST Routers
+        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpPost]
         [Route("postUpdate")]
         public async Task<IActionResult> PostUpdate([FromBody]HelperScheduleChange json)
@@ -96,17 +119,20 @@ namespace EACA_API.Controllers.ExcelSchedule
         {
             var listRanges = GenerateListRanges(parity, groupId);
             var schedule = await ExcelApi.GetSchedule(listRanges);
+
             schedule.GroupId = groupId.ToString();
             schedule.Parity = parity.ParityConvert();
+
             return schedule;
         }
+
         private List<string> GenerateListRanges(string parity, int groupId)
         {
             var listRange = new List<string>();
+
             foreach (var item in StaticScheduleInfo.Week)
-            {
                 listRange.Add(GetDayRange(parity, groupId, item.Key));
-            }
+
             return listRange;
         }
 

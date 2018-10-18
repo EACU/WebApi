@@ -5,6 +5,7 @@ using EACA_API.Models;
 
 namespace EACA_API.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("api/[controller]")]
     public class ItemController : Controller
     {

@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EACA_API.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize(Policy = nameof(ApiUser))]
     [Route("api/[controller]/[action]")]
     public class DashboardController : Controller
@@ -23,8 +24,9 @@ namespace EACA_API.Controllers
             _caller = httpContextAccessor.HttpContext.User;
         }
 
+        [HttpGet]
         public IActionResult Index() => View();
-        
+
         // GET /api/dashboard/home
         [HttpGet]
         public async Task<IActionResult> Home()

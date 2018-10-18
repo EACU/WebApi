@@ -27,7 +27,15 @@ namespace EACA_API.Controllers.Account
             _appDbContext = appDbContext;
         }
 
+        /// <summary>
+        /// Метод регистрации в веб-апи
+        /// </summary>
+        /// <param name="model">Реквизиты для регистрации пользователя</param>
+        /// <response code="200">Возвращает сообщение об успешной регистрации</response>
+        /// <response code="400">Возвращает файл json с некоторой информацией об ошибках</response>
+        /// <returns>Возвращает статус код с сообщением</returns>
         // POST api/accounts/accounts/
+        [HttpPost]
         public async Task<IActionResult> Post([FromBody]RegistrationViewModel model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);

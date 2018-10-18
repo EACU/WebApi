@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +32,15 @@ namespace EACA_API.Controllers.Account
             _jwtOptions = jwtOptions.Value;
         }
 
+        /// <summary>
+        /// Метод авторизации в веб-апи
+        /// </summary>
+        /// <param name="credentials">Реквизиты для доступа к аккаунту веб-апи</param>
+        /// <response code="200">Возвращает идентификатор пользователя(id), jwt-токен и время истечения токена</response>
+        /// <response code="400">Возвращает файл json с некоторой информацией об ошибках</response>
+        /// <returns>Возвращает jwt токен</returns>
         // POST api/accounts/login/
+        [HttpPost]
         public async Task<IActionResult> Post([FromBody]CredentialsViewModel credentials)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);

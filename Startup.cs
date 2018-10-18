@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Text;
+using System.Reflection;
+using System.IO;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -23,6 +25,8 @@ using EACA_API.Data;
 
 using FluentValidation.AspNetCore;
 using AutoMapper;
+using Swashbuckle.AspNetCore.Swagger;
+
 
 namespace EACA_API
 {
@@ -79,6 +83,27 @@ namespace EACA_API
             // FluentValidation
             services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
 
+            // Swagger
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info
+                {
+                    Title = "EACA API",
+                    Version = "v1",
+                    Description = "WebApi для приложении ЕАСИ",
+                    Contact = new Contact
+                    {
+                        Name = "GitHub",
+                        Url = "https://github.com/Eqip3u/EACA-API"
+                    },
+                });
+
+                //xml enable
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
+
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -90,6 +115,13 @@ namespace EACA_API
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
+
+            // Swagger
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "EACA API V1");
+            });
 
             app.UseMvc();
 

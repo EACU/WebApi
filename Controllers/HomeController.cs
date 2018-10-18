@@ -2,9 +2,10 @@
 
 namespace EACA_API.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("/")]
     public class HomeController : Controller
     {
-        public IActionResult Index() => View();
+        public IActionResult Index() => Redirect("/swagger/ui/index.html");
     }
 }
