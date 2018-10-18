@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EACA.Helpers
+namespace EACA_API.Helpers
 {
     public class Constants
     {

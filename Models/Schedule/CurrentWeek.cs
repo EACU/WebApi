@@ -1,6 +1,6 @@
 using System;
 
-namespace EACA.Models
+namespace EACA_API.Models
 {
     public class CurrentWeek
     {

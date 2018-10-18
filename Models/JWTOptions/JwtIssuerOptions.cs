@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace EACA.Models
+namespace EACA_API.Models
 {
     public class JwtIssuerOptions
     {

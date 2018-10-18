@@ -1,20 +1,16 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace EACA.ViewModels.Validations
+namespace EACA_API.ViewModels.Validations
 {
     public class RegistrationViewModelValidator : AbstractValidator<RegistrationViewModel>
     {
         public RegistrationViewModelValidator()
         {
-            RuleFor(vm => vm.Email).NotEmpty().WithMessage("Email cannot be empty");
-            RuleFor(vm => vm.Password).NotEmpty().WithMessage("Password cannot be empty");
-            RuleFor(vm => vm.FirstName).NotEmpty().WithMessage("FirstName cannot be empty");
-            RuleFor(vm => vm.LastName).NotEmpty().WithMessage("LastName cannot be empty");
-            RuleFor(vm => vm.Group).NotEmpty().WithMessage("Group cannot be empty");
+            RuleFor(vm => vm.Email).NotEmpty().WithMessage("Почта не может быть пустой");
+            RuleFor(vm => vm.Password).NotEmpty().WithMessage("Пароль не может быть пустым");
+            RuleFor(vm => vm.FirstName).NotEmpty().WithMessage("Имя не может быть пустым");
+            RuleFor(vm => vm.LastName).NotEmpty().WithMessage("Фамилия не может быть пустой");
+            RuleFor(vm => vm.Group).NotEmpty().WithMessage("Группа не может быть пустой");
         }
     }
 }

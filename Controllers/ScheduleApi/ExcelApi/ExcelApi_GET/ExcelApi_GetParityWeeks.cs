@@ -1,10 +1,6 @@
+using EACA_API.Models;
 
-using System;
-using System.Collections.Generic;
-
-using EACA.Models;
-
-namespace EACA.Controllers.ExcelSchedule
+namespace EACA_API.Controllers.ExcelSchedule
 {
     public static partial class ExcelApi
     {

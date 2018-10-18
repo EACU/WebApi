@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EACA.Models.Entities
+namespace EACA_API.Models.Entities
 {
     public class Student
     {
@@ -11,6 +11,6 @@ namespace EACA.Models.Entities
         public string Group { get; set; }
 
         public string IdentityId { get; set; }
-        public AppUser Identity { get; set; }
+        public ApiUser Identity { get; set; }
     }
 }

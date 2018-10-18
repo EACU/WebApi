@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace EACA.Models
+namespace EACA_API.Models
 {
     public class HelperScheduleChange
     {

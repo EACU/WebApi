@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EACA.Models;
+using EACA_API.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EACA.Controllers.ExcelSchedule
+namespace EACA_API.Controllers.ExcelSchedule
 {
     [EnableCors("AllowAllOrigin")]
     [Route("api/[controller]")]
@@ -16,7 +16,7 @@ namespace EACA.Controllers.ExcelSchedule
 
         public ScheduleController()
         {
-            GroupsList.Groups = Serializer.Deserialize<Response<Group>>("groups_list.json").ListGroups; // Десериализуем список групп 
+            GroupsList.Groups = Serializer.Deserialize<Response<Group>>("groups_list.json").ListGroups;
         }
 
         #region GET Routers

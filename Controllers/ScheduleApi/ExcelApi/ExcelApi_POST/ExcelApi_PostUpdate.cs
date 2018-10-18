@@ -1,5 +1,5 @@
 
-using EACA.Models;
+using EACA_API.Models;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using static Google.Apis.Sheets.v4.SpreadsheetsResource.ValuesResource.UpdateRequest;
 using Data = Google.Apis.Sheets.v4.Data;
 
-namespace EACA.Controllers.ExcelSchedule
+namespace EACA_API.Controllers.ExcelSchedule
 {
     public static partial class ExcelApi
     {

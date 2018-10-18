@@ -1,4 +1,4 @@
-﻿using EACA.Models;
+﻿using EACA_API.Models;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
 
-namespace EACA.Auth
+namespace EACA_API.Auth
 {
     public class JwtFactory : IJwtFactory
     {
@@ -31,7 +31,6 @@ namespace EACA.Auth
                  identity.FindFirst(Helpers.Constants.Strings.JwtClaimIdentifiers.Id)
              };
 
-            // Create the JWT security token and encode it.
             var jwt = new JwtSecurityToken(
                 issuer: _jwtOptions.Issuer,
                 audience: _jwtOptions.Audience,
@@ -54,7 +53,6 @@ namespace EACA.Auth
             });
         }
 
-        /// <returns>Date converted to seconds since Unix epoch (Jan 1, 1970, midnight UTC).</returns>
         private static long ToUnixEpochDate(DateTime date)
           => (long)Math.Round((date.ToUniversalTime() -
                                new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero))
@@ -62,22 +60,17 @@ namespace EACA.Auth
 
         private static void ThrowIfInvalidOptions(JwtIssuerOptions options)
         {
-            if (options == null) throw new ArgumentNullException(nameof(options));
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
 
             if (options.ValidFor <= TimeSpan.Zero)
-            {
                 throw new ArgumentException("Must be a non-zero TimeSpan.", nameof(JwtIssuerOptions.ValidFor));
-            }
 
             if (options.SigningCredentials == null)
-            {
                 throw new ArgumentNullException(nameof(JwtIssuerOptions.SigningCredentials));
-            }
 
             if (options.JtiGenerator == null)
-            {
                 throw new ArgumentNullException(nameof(JwtIssuerOptions.JtiGenerator));
-            }
         }
     }
 }

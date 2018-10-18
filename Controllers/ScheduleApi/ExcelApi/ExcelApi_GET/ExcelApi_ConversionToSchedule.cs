@@ -1,10 +1,10 @@
-
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using EACA.Models;
+
+using EACA_API.Models;
+
 using Google.Apis.Sheets.v4.Data;
 
-namespace EACA.Controllers.ExcelSchedule
+namespace EACA_API.Controllers.ExcelSchedule
 {
     public static partial class ExcelApi
     {

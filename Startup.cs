@@ -1,32 +1,35 @@
-﻿using EACA.Data;
-using AutoMapper;
+﻿using System;
+using System.Text;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using FluentValidation.AspNetCore;
-using EACA.Models.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using EACA.Models;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using EACA.Helpers;
-using System;
-using EACA.Auth;
-using System.Net;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
-using EACA.Extension;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-namespace EACA
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+
+using EACA_API.Models.Entities;
+using EACA_API.Models;
+using EACA_API.Helpers;
+using EACA_API.Auth;
+using EACA_API.Data;
+
+using FluentValidation.AspNetCore;
+using AutoMapper;
+
+namespace EACA_API
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         private readonly string SecretKey;
         private readonly SymmetricSecurityKey _signingKey;
 
@@ -37,25 +40,63 @@ namespace EACA
             _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
         }
 
-        public IConfiguration Configuration { get; }
-
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options => 
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("AzureConnection")));
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAllOrigin", x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-            });
-            services.Configure<MvcOptions>(options =>
-            {
-                options.Filters.Add(new CorsAuthorizationFilterFactory("AllowAllOrigin"));
-            });
+            services.AddCors(options => 
+                options.AddPolicy("AllowAllOrigin", x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
+            services.Configure<MvcOptions>(options => 
+                options.Filters.Add(new CorsAuthorizationFilterFactory("AllowAllOrigin")));
+
+            services.TryAddSingleton<IItemRepository, ItemRepository>();
             services.TryAddTransient<IHttpContextAccessor, HttpContextAccessor>();
 
-            #region JWT AUTH
+            // JSON Web Token Authentication
+            JWTServices(services);
+
+            services.AddAuthorization(options =>
+                options.AddPolicy(nameof(ApiUser), policy => 
+                    policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol, Constants.Strings.JwtClaims.ApiAccess)));
+
+            var builder = services.AddIdentityCore<ApiUser>(o =>
+            {
+                o.Password.RequireDigit = false;
+                o.Password.RequireLowercase = false;
+                o.Password.RequireUppercase = false;
+                o.Password.RequireNonAlphanumeric = false;
+                o.Password.RequiredLength = 6;
+            });
+
+            builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), builder.Services);
+            builder.AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+            // AutoMapper
+            services.AddAutoMapper();
+
+            // FluentValidation
+            services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+
+        }
+
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            if (env.IsDevelopment())
+                app.UseDeveloperExceptionPage();
+
+            app.UseAuthentication();
+
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
+            app.UseMvc();
+
+        }
+
+        private void JWTServices(IServiceCollection services)
+        {
             services.AddSingleton<IJwtFactory, JwtFactory>();
 
             var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
@@ -93,43 +134,6 @@ namespace EACA
                 configureOptions.TokenValidationParameters = tokenValidationParameters;
                 configureOptions.SaveToken = true;
             });
-            #endregion
-
-            #region Identity Role
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("ApiUser", policy => policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol, Constants.Strings.JwtClaims.ApiAccess));
-            });
-            #endregion
-
-            #region Identity Settings
-            var builder = services.AddIdentityCore<AppUser>(o =>
-            {
-                o.Password.RequireDigit = false;
-                o.Password.RequireLowercase = false;
-                o.Password.RequireUppercase = false;
-                o.Password.RequireNonAlphanumeric = false;
-                o.Password.RequiredLength = 6;
-            });
-            builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), builder.Services);
-            builder.AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
-            #endregion 
-
-            services.AddAutoMapper();
-            services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
-        }
-
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-                        
-            app.UseAuthentication();
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
-            app.UseMvc();
         }
     }
 }

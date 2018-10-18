@@ -1,4 +1,4 @@
-namespace EACA.Controllers
+namespace EACA_API.Controllers
 {
     public static class ParityConverter
     {

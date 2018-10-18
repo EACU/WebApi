@@ -1,4 +1,4 @@
-﻿using EACA.Models;
+﻿using EACA_API.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EACA.Controllers
+namespace EACA_API.Controllers
 {
     public class Response<T>
     {

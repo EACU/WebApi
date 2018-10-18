@@ -1,4 +1,4 @@
-namespace EACA.Models
+namespace EACA_API.Models
 {
     public class Lesson
     {
