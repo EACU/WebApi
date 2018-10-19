@@ -49,10 +49,10 @@ namespace EACA_API
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AzureConnection")));
 
-            services.AddCors(options => 
+            services.AddCors(options =>
                 options.AddPolicy("AllowAllOrigin", x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
-            services.Configure<MvcOptions>(options => 
+            services.Configure<MvcOptions>(options =>
                 options.Filters.Add(new CorsAuthorizationFilterFactory("AllowAllOrigin")));
 
             services.TryAddSingleton<IItemRepository, ItemRepository>();
@@ -61,9 +61,15 @@ namespace EACA_API
             // JSON Web Token Authentication
             JWTServices(services);
 
-            services.AddAuthorization(options =>
-                options.AddPolicy(nameof(ApiUser), policy => 
-                    policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol, Constants.Strings.JwtClaims.ApiAccess)));
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("student", policy =>
+            //        policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Role_api, Constants.Strings.JwtClaims.ApiAccessStudent));
+
+            //    options.AddPolicy("admin", policy =>
+            //        policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Role_api, Constants.Strings.JwtClaims.ApiAccessAdmin));
+            //});
+
 
             var builder = services.AddIdentityCore<ApiUser>(o =>
             {
@@ -156,16 +162,13 @@ namespace EACA_API
                 ClockSkew = TimeSpan.Zero
             };
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(configureOptions =>
-            {
-                configureOptions.ClaimsIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
-                configureOptions.TokenValidationParameters = tokenValidationParameters;
-                configureOptions.SaveToken = true;
-            });
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(configureOptions =>
+                {
+                    configureOptions.ClaimsIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
+                    configureOptions.TokenValidationParameters = tokenValidationParameters;
+                    configureOptions.SaveToken = true;
+                });
         }
     }
 }

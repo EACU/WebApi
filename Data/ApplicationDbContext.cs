@@ -9,6 +9,7 @@ namespace EACA_API.Data
         public ApplicationDbContext(DbContextOptions options)
             : base(options) { }
 
+        public DbSet<Admin> Admins { get; set; }
         public DbSet<Student> Students { get; set; }
     }
 }

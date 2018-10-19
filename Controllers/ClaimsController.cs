@@ -2,10 +2,10 @@
 
 namespace EACA_API.Controllers
 {
-    [ApiExplorerSettings(IgnoreApi = true)]
-    [Route("/")]
-    public class HomeController : Controller
+    [Route("api/[controller]")]
+    public class ClaimsController : Controller
     {
+        [HttpGet]
         public IActionResult Index() => View();
     }
 }

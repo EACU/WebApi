@@ -1,18 +1,16 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using EACA_API.Data;
-using EACA_API.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using EACA_API.Data;
 
 namespace EACA_API.Controllers
 {
-    [ApiExplorerSettings(IgnoreApi = true)]
-    [Authorize(Policy = nameof(ApiUser))]
-    [Route("api/[controller]/[action]")]
+    [Authorize(Roles = "api_access_student")]
+    [Route("api/[controller]")]
     public class DashboardController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -24,17 +22,14 @@ namespace EACA_API.Controllers
             _caller = httpContextAccessor.HttpContext.User;
         }
 
+        // GET /api/dashboard/
         [HttpGet]
-        public IActionResult Index() => View();
-
-        // GET /api/dashboard/home
-        [HttpGet]
-        public async Task<IActionResult> Home()
+        public async Task<IActionResult> Get()
         {
-            var userId = _caller.Claims.Single(c => c.Type == "id");
+            var userId = _caller.Claims.Single(c => c.Type == ClaimsIdentity.DefaultNameClaimType);
             var student = await _context.Students.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
             
-            return Ok(new { student.Identity.FirstName, student.Identity.LastName, student.Identity.PictureUrl, student.Group });
+            return Ok(new { student.Identity.FirstName, student.Identity.LastName, student.Identity.PictureUrl});
         }
     }
 }

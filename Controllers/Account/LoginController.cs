@@ -64,7 +64,7 @@ namespace EACA_API.Controllers.Account
             if (userToVerify == null) return await Task.FromResult<ClaimsIdentity>(null);
 
             if (await _userManager.CheckPasswordAsync(userToVerify, password))
-                return await Task.FromResult(_jwtFactory.GenerateClaimsIdentity(userName, userToVerify.Id));
+                return await Task.FromResult(_jwtFactory.GenerateClaimsIdentity(userName, userToVerify.Id, userToVerify.Role));
 
             return await Task.FromResult<ClaimsIdentity>(null);
         }

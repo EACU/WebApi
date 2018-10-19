@@ -27,8 +27,8 @@ namespace EACA_API.Auth
                  new Claim(JwtRegisteredClaimNames.Sub, userName),
                  new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.JtiGenerator()),
                  new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_jwtOptions.IssuedAt).ToString(), ClaimValueTypes.Integer64),
-                 identity.FindFirst(Helpers.Constants.Strings.JwtClaimIdentifiers.Rol),
-                 identity.FindFirst(Helpers.Constants.Strings.JwtClaimIdentifiers.Id)
+                 identity.FindFirst(ClaimsIdentity.DefaultNameClaimType),
+                 identity.FindFirst(ClaimsIdentity.DefaultRoleClaimType)
              };
 
             var jwt = new JwtSecurityToken(
@@ -44,13 +44,15 @@ namespace EACA_API.Auth
             return encodedJwt;
         }
 
-        public ClaimsIdentity GenerateClaimsIdentity(string userName, string id)
+        public ClaimsIdentity GenerateClaimsIdentity(string userName, string id, string role)
         {
-            return new ClaimsIdentity(new GenericIdentity(userName, "Token"), new[]
+            var claims = new List<Claim>
             {
-                new Claim(Helpers.Constants.Strings.JwtClaimIdentifiers.Id, id),
-                new Claim(Helpers.Constants.Strings.JwtClaimIdentifiers.Rol, Helpers.Constants.Strings.JwtClaims.ApiAccess)
-            });
+                new Claim(ClaimsIdentity.DefaultNameClaimType, id),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, role)
+            };
+
+            return new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
         }
 
         private static long ToUnixEpochDate(DateTime date)
