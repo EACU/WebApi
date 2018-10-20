@@ -1,7 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
 
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -17,7 +16,6 @@ using Newtonsoft.Json;
 
 namespace EACA_API.Controllers.Account
 {
-    [EnableCors("AllowAllOrigin")]
     [Route("api/accounts/[controller]")]
     public class LoginController : Controller
     {
@@ -64,7 +62,10 @@ namespace EACA_API.Controllers.Account
             if (userToVerify == null) return await Task.FromResult<ClaimsIdentity>(null);
 
             if (await _userManager.CheckPasswordAsync(userToVerify, password))
-                return await Task.FromResult(_jwtFactory.GenerateClaimsIdentity(userName, userToVerify.Id, userToVerify.Role));
+            {
+                var userRoles = await _userManager.GetRolesAsync(userToVerify);
+                return await Task.FromResult(_jwtFactory.GenerateClaimsIdentity(userName, userToVerify.Id, userRoles));
+            }
 
             return await Task.FromResult<ClaimsIdentity>(null);
         }

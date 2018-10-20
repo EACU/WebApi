@@ -40,11 +40,12 @@ namespace EACA_API.Controllers.Account
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var userIdentity = _mapper.Map<ApiUser>(model);
-            userIdentity.Role = Helpers.Constants.Strings.JwtClaims.ApiAccessStudent;
 
             var result = await _userManager.CreateAsync(userIdentity, model.Password);
 
             if (!result.Succeeded) return BadRequest(Helpers.Errors.AddErrorsToModelState(result, ModelState));
+
+            await _userManager.AddToRoleAsync(userIdentity, "api_access_student");
 
             await _appDbContext.Students.AddAsync(new Student { IdentityId = userIdentity.Id, Group = model.Group,  });
             await _appDbContext.SaveChangesAsync();

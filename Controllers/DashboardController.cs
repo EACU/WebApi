@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EACA_API.Data;
+using Microsoft.AspNetCore.Cors;
 
 namespace EACA_API.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize(Roles = "api_access_student")]
     [Route("api/[controller]")]
     public class DashboardController : Controller

@@ -19,7 +19,6 @@ using Microsoft.IdentityModel.Tokens;
 
 using EACA_API.Models.Entities;
 using EACA_API.Models;
-using EACA_API.Helpers;
 using EACA_API.Auth;
 using EACA_API.Data;
 
@@ -49,27 +48,16 @@ namespace EACA_API
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AzureConnection")));
 
-            services.AddCors(options =>
-                options.AddPolicy("AllowAllOrigin", x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+            // CORS
+            services.AddCors(options => options.AddPolicy("AllowAllOrigin", x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+            services.Configure<MvcOptions>(options => options.Filters.Add(new CorsAuthorizationFilterFactory("AllowAllOrigin")));
 
-            services.Configure<MvcOptions>(options =>
-                options.Filters.Add(new CorsAuthorizationFilterFactory("AllowAllOrigin")));
-
+            // DI Custom
             services.TryAddSingleton<IItemRepository, ItemRepository>();
             services.TryAddTransient<IHttpContextAccessor, HttpContextAccessor>();
 
             // JSON Web Token Authentication
             JWTServices(services);
-
-            //services.AddAuthorization(options =>
-            //{
-            //    options.AddPolicy("student", policy =>
-            //        policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Role_api, Constants.Strings.JwtClaims.ApiAccessStudent));
-
-            //    options.AddPolicy("admin", policy =>
-            //        policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Role_api, Constants.Strings.JwtClaims.ApiAccessAdmin));
-            //});
-
 
             var builder = services.AddIdentityCore<ApiUser>(o =>
             {
@@ -81,7 +69,9 @@ namespace EACA_API
             });
 
             builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), builder.Services);
-            builder.AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+            builder.AddRoleManager<RoleManager<IdentityRole>>();
+            builder.AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.AddDefaultTokenProviders();
 
             // AutoMapper
             services.AddAutoMapper();
@@ -103,13 +93,11 @@ namespace EACA_API
                         Url = "https://github.com/Eqip3u/EACA-API"
                     },
                 });
-
                 //xml enable
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
-
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -124,10 +112,7 @@ namespace EACA_API
 
             // Swagger
             app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "EACA API V1");
-            });
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EACA API V1"));
 
             app.UseMvc();
 
