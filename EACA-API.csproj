@@ -13,13 +13,13 @@
 
   <ItemGroup>
     <Compile Remove="ClientApp\**" />
+    <Compile Remove="wwwroot\swagger\**" />
     <Content Remove="ClientApp\**" />
+    <Content Remove="wwwroot\swagger\**" />
     <EmbeddedResource Remove="ClientApp\**" />
+    <EmbeddedResource Remove="wwwroot\swagger\**" />
     <None Remove="ClientApp\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\swagger\ui\" />
+    <None Remove="wwwroot\swagger\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,6 +45,10 @@
     <Content Update="group_list.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>
