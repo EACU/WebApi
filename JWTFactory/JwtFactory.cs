@@ -1,12 +1,10 @@
-﻿using EACA_API.Models;
-using Microsoft.Extensions.Options;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using EACA_API.Models;
 
 namespace EACA_API.Auth
 {
@@ -24,7 +22,7 @@ namespace EACA_API.Auth
         {
             var claims = new List<Claim>
             {
-                 new Claim(JwtRegisteredClaimNames.Sub, userName),
+                 new Claim(JwtRegisteredClaimNames.Email, userName),
                  new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.JtiGenerator()),
                  new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_jwtOptions.IssuedAt).ToString(), ClaimValueTypes.Integer64)
              };
@@ -53,6 +51,9 @@ namespace EACA_API.Auth
 
             foreach (var role in roles)
                 claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, role));
+
+            foreach (var role in roles)
+                claims.Add(new Claim("rol", role));
 
             return new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
         }

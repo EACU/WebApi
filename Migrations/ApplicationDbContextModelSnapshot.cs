@@ -73,8 +73,6 @@ namespace EACA_API.Migrations
 
                     b.Property<string>("PictureUrl");
 
-                    b.Property<string>("Role");
-
                     b.Property<string>("SecurityStamp");
 
                     b.Property<bool>("TwoFactorEnabled");
