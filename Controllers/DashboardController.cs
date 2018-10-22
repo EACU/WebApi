@@ -31,7 +31,7 @@ namespace EACA_API.Controllers
             var userId = _caller.Claims.Single(c => c.Type == ClaimsIdentity.DefaultNameClaimType);
             var student = await _context.Students.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
             
-            return Ok(new { student.Identity.FirstName, student.Identity.LastName, student.Identity.PictureUrl});
+            return Ok(new { student.Identity.FirstName, student.Identity.LastName, student.Identity.PictureUrl, student.Headman, student.Group});
         }
     }
 }
