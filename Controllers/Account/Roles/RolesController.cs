@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EACA_API.Controllers.Account.Roles
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("api/accounts/[controller]/[action]")]
     public class RolesController : Controller
     {

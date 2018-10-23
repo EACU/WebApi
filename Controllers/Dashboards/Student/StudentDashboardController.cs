@@ -6,27 +6,26 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EACA_API.Data;
-using Microsoft.AspNetCore.Cors;
 
 namespace EACA_API.Controllers
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize(Roles = "api_access_student")]
-    [Route("api/[controller]")]
-    public class DashboardController : Controller
+    [Route("api/[controller]/[action]")]
+    public class StudentController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly ClaimsPrincipal _caller;
 
-        public DashboardController(ApplicationDbContext appDbContext, IHttpContextAccessor httpContextAccessor)
+        public StudentController(ApplicationDbContext appDbContext, IHttpContextAccessor httpContextAccessor)
         {
             _context = appDbContext;
             _caller = httpContextAccessor.HttpContext.User;
         }
 
-        // GET /api/dashboard/
+        // GET /api/student/dashboard/
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Dashboard()
         {
             var userId = _caller.Claims.Single(c => c.Type == ClaimsIdentity.DefaultNameClaimType);
             var student = await _context.Students.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
