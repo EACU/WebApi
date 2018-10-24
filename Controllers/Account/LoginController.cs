@@ -1,30 +1,26 @@
-﻿using System.Security.Claims;
-using System.Threading.Tasks;
-
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-
-using EACA_API.Auth;
-using EACA_API.Helpers;
+using EACA_API.Services;
 using EACA_API.Models;
 using EACA_API.Models.Entities;
 using EACA_API.ViewModels;
-
-using Newtonsoft.Json;
-
+using EACA_API.Data;
 
 namespace EACA_API.Controllers.Account
 {
     [Route("api/accounts/[controller]")]
     public class LoginController : Controller
     {
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<ApiUser> _userManager;
         private readonly IJwtFactory _jwtFactory;
         private readonly JwtIssuerOptions _jwtOptions;
 
-        public LoginController(UserManager<ApiUser> userManager, IJwtFactory jwtFactory, IOptions<JwtIssuerOptions> jwtOptions)
+        public LoginController(ApplicationDbContext context, UserManager<ApiUser> userManager, IJwtFactory jwtFactory, IOptions<JwtIssuerOptions> jwtOptions)
         {
+            _context = context;
             _userManager = userManager;
             _jwtFactory = jwtFactory;
             _jwtOptions = jwtOptions.Value;
@@ -43,31 +39,13 @@ namespace EACA_API.Controllers.Account
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var identity = await GetClaimsIdentity(credentials.UserName, credentials.Password);
+            var identity = await Helpers.Claims.GetClaimsIdentity(_userManager, _jwtFactory, credentials.UserName, credentials.Password);
 
             if (identity == null)
-                return BadRequest(Errors.AddErrorToModelState("login_failure", "Неправильный логин или пароль.", ModelState));
+                return BadRequest(Helpers.Errors.AddErrorToModelState("login_failure", "Неправильный логин или пароль.", ModelState));
 
-            var jwt = await Tokens.GenerateJwt(identity, _jwtFactory, credentials.UserName, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented });
+            var jwt = await Helpers.Tokens.GenerateJwt(_context, identity, _jwtFactory, credentials.UserName, _jwtOptions);
             return Ok(jwt);
-        }
-
-        private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password)
-        {
-            if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
-                return await Task.FromResult<ClaimsIdentity>(null);
-
-            var userToVerify = await _userManager.FindByNameAsync(userName);
-
-            if (userToVerify == null) return await Task.FromResult<ClaimsIdentity>(null);
-
-            if (await _userManager.CheckPasswordAsync(userToVerify, password))
-            {
-                var userRoles = await _userManager.GetRolesAsync(userToVerify);
-                return await Task.FromResult(_jwtFactory.GenerateClaimsIdentity(userName, userToVerify.Id, userRoles));
-            }
-
-            return await Task.FromResult<ClaimsIdentity>(null);
         }
     }
 }

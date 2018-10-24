@@ -19,7 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 
 using EACA_API.Models.Entities;
 using EACA_API.Models;
-using EACA_API.Auth;
+using EACA_API.Services;
 using EACA_API.Data;
 
 using FluentValidation.AspNetCore;

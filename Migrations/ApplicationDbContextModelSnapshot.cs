@@ -19,6 +19,36 @@ namespace EACA_API.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("EACA_API.Models.AccountEntities.Tokens.RefreshToken", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(450);
+
+                    b.Property<DateTime>("ExpiresUtc");
+
+                    b.Property<DateTime>("IssuedUtc");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(450);
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(450);
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Token")
+                        .HasName("refreshToken_Token");
+
+
+                    b.HasAlternateKey("UserId")
+                        .HasName("refreshToken_UserId");
+
+                    b.ToTable("AspNetRefreshTokens");
+                });
+
             modelBuilder.Entity("EACA_API.Models.Entities.Admin", b =>
                 {
                     b.Property<int>("Id")
@@ -220,6 +250,14 @@ namespace EACA_API.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("EACA_API.Models.AccountEntities.Tokens.RefreshToken", b =>
+                {
+                    b.HasOne("EACA_API.Models.Entities.ApiUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("EACA_API.Models.Entities.Admin", b =>

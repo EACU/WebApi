@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using EACA_API.Models;
 
-namespace EACA_API.Auth
+namespace EACA_API.Services
 {
     public class JwtFactory : IJwtFactory
     {
@@ -40,22 +40,6 @@ namespace EACA_API.Auth
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
             return encodedJwt;
-        }
-
-        public ClaimsIdentity GenerateClaimsIdentity(string userName, string id, IList<string> roles)
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, id),
-            };
-
-            foreach (var role in roles)
-                claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, role));
-
-            foreach (var role in roles)
-                claims.Add(new Claim("rol", role));
-
-            return new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
         }
 
         private static long ToUnixEpochDate(DateTime date)
