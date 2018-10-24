@@ -27,7 +27,7 @@ namespace EACA_API.Helpers
             return await Task.FromResult<ClaimsIdentity>(null);
         }
 
-        private static ClaimsIdentity GenerateClaimsIdentity(string userName, string id, IList<string> roles)
+        public static ClaimsIdentity GenerateClaimsIdentity(string userName, string id, IList<string> roles)
         {
             var claims = new List<Claim>
             {

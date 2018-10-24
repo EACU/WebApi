@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using EACA_API.Data;
 using EACA_API.Models;
 using EACA_API.Models.AccountEntities.Tokens;
@@ -24,6 +25,14 @@ namespace EACA_API.Helpers
 
         private static async Task<RefreshToken> GenerateRefreshToken(ApplicationDbContext context, string userId, JwtIssuerOptions jwtOptions)
         {
+            var isTokenInDB = await context.RefreshTokens.Include(x => x.User).SingleOrDefaultAsync(x => x.UserId == userId);
+
+            if (isTokenInDB != null)
+            {
+                context.RefreshTokens.Remove(isTokenInDB);
+                await context.SaveChangesAsync();
+            }
+
             var refreshToken = new RefreshToken
             {
                 UserId = userId,
@@ -32,7 +41,7 @@ namespace EACA_API.Helpers
                 ExpiresUtc = jwtOptions.Expiration
             };
 
-            context.RefreshTokens.Add(refreshToken);
+            await context.RefreshTokens.AddAsync(refreshToken);
             await context.SaveChangesAsync();
 
             return refreshToken;
