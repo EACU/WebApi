@@ -10,7 +10,7 @@
                 public const string Id = "id";
             }
 
-            public static class JwtClaims
+            public static class JwtRoles
             {
                 public const string ApiAccessAdmin = "api_access_admin";
                 public const string ApiAccessStudent = "api_access_student";

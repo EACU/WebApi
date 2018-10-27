@@ -8,6 +8,7 @@ using EACA_API.Models.Entities;
 using EACA_API.ViewModels;
 
 using AutoMapper;
+using EACA_API.Helpers;
 
 namespace EACA_API.Controllers.Account
 {
@@ -43,9 +44,9 @@ namespace EACA_API.Controllers.Account
 
             var result = await _userManager.CreateAsync(userIdentity, model.Password);
 
-            if (!result.Succeeded) return BadRequest(Helpers.Errors.AddErrorsToModelState(result, ModelState));
+            if (!result.Succeeded) return BadRequest(Errors.AddIdentityErrorsToModelState(result, ModelState));
 
-            await _userManager.AddToRoleAsync(userIdentity, "api_access_student");
+            await _userManager.AddToRoleAsync(userIdentity, Constants.Strings.JwtRoles.ApiAccessStudent);
 
             await _appDbContext.Students.AddAsync(new Student { IdentityId = userIdentity.Id, Group = model.Group,  });
             await _appDbContext.SaveChangesAsync();
