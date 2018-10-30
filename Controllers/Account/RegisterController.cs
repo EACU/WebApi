@@ -46,7 +46,7 @@ namespace EACA_API.Controllers.Account
 
             if (!result.Succeeded) return BadRequest(Errors.AddIdentityErrorsToModelState(result, ModelState));
 
-            await _userManager.AddToRoleAsync(userIdentity, Constants.Strings.JwtRoles.ApiAccessStudent);
+            await _userManager.AddToRoleAsync(userIdentity, Constants.Jwt.JwtRoles.ApiAccessStudent);
 
             await _appDbContext.Students.AddAsync(new Student { IdentityId = userIdentity.Id, Group = model.Group,  });
             await _appDbContext.SaveChangesAsync();

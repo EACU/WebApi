@@ -19,13 +19,14 @@ using Microsoft.IdentityModel.Tokens;
 
 using EACA_API.Models.Entities;
 using EACA_API.Models;
-using EACA_API.Services;
+using EACA_API.Helpers;
 using EACA_API.Data;
 
 using FluentValidation.AspNetCore;
 using AutoMapper;
 using Swashbuckle.AspNetCore.Swagger;
-
+using EACA_API.Controllers.ScheduleApi.Services;
+using EACA_API.Services;
 
 namespace EACA_API
 {
@@ -53,6 +54,8 @@ namespace EACA_API
             services.Configure<MvcOptions>(options => options.Filters.Add(new CorsAuthorizationFilterFactory("AllowAllOrigin")));
 
             // DI Custom
+            services.AddSingleton<IScheduleService, ScheduleService>();
+            services.AddSingleton<IJwtFactory, JwtFactory>();
             services.TryAddSingleton<IItemRepository, ItemRepository>();
             services.TryAddTransient<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -120,8 +123,6 @@ namespace EACA_API
 
         private void JWTServices(IServiceCollection services)
         {
-            services.AddSingleton<IJwtFactory, JwtFactory>();
-
             var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
 
             services.Configure<JwtIssuerOptions>(options =>

@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using EACA_API.Services;
 using EACA_API.Models;
 using EACA_API.Models.Entities;
 using EACA_API.ViewModels;
 using EACA_API.Data;
+using EACA_API.Services;
 
 namespace EACA_API.Controllers.Account
 {

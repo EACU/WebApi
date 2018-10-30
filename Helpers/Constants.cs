@@ -2,7 +2,7 @@
 {
     public class Constants
     {
-        public static class Strings
+        public static class Jwt
         {
             public static class JwtClaimIdentifiers
             {

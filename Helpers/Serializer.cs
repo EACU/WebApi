@@ -2,7 +2,7 @@
 using System.IO;
 using Newtonsoft.Json;
 
-namespace EACA_API.Services
+namespace EACA_API.Helpers
 {
     public class Response<T>
     {

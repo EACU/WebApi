@@ -65,10 +65,10 @@ namespace EACA_API.Controllers.Account.Roles
 
             var userRoles = await _userManager.GetRolesAsync(user);
 
-            if (userRoles.Contains(Constants.Strings.JwtRoles.ApiAccessAdmin))
+            if (userRoles.Contains(Constants.Jwt.JwtRoles.ApiAccessAdmin))
                 return BadRequest(Errors.AddErrorToModelState("roles_errors", $"У пользователя: {user.UserName} уже есть права администратора", ModelState));
 
-            await _userManager.AddToRoleAsync(user, Constants.Strings.JwtRoles.ApiAccessAdmin);
+            await _userManager.AddToRoleAsync(user, Constants.Jwt.JwtRoles.ApiAccessAdmin);
 
             await _appDbContext.Admins.AddAsync(new Admin { IdentityId = requestUser.Id });
             await _appDbContext.SaveChangesAsync();
@@ -92,7 +92,7 @@ namespace EACA_API.Controllers.Account.Roles
             _appDbContext.Admins.Remove(userAdmin);
             await _appDbContext.SaveChangesAsync();
 
-            await _userManager.RemoveFromRoleAsync(user, Constants.Strings.JwtRoles.ApiAccessAdmin);
+            await _userManager.RemoveFromRoleAsync(user, Constants.Jwt.JwtRoles.ApiAccessAdmin);
 
             return Ok($"У пользователя: {user.UserName} удалены права администратора");
         }
@@ -106,10 +106,10 @@ namespace EACA_API.Controllers.Account.Roles
                 return BadRequest(Errors.AddErrorToModelState("roles_errors", "Такого пользователя не существует", ModelState));
 
             var userRoles = await _userManager.GetRolesAsync(user);
-            if (userRoles.Contains(Constants.Strings.JwtRoles.ApiAccessStudent))
+            if (userRoles.Contains(Constants.Jwt.JwtRoles.ApiAccessStudent))
                 return BadRequest(Errors.AddErrorToModelState("roles_errors", $"У пользователя: {user.UserName} уже есть права студента", ModelState));
 
-            await _userManager.AddToRoleAsync(user, Constants.Strings.JwtRoles.ApiAccessStudent);
+            await _userManager.AddToRoleAsync(user, Constants.Jwt.JwtRoles.ApiAccessStudent);
 
             await _appDbContext.Students.AddAsync(new Student { IdentityId = requestUser.Id });
             await _appDbContext.SaveChangesAsync();
@@ -133,7 +133,7 @@ namespace EACA_API.Controllers.Account.Roles
             _appDbContext.Students.Remove(userStudent);
             await _appDbContext.SaveChangesAsync();
 
-            await _userManager.RemoveFromRoleAsync(user, Constants.Strings.JwtRoles.ApiAccessStudent);
+            await _userManager.RemoveFromRoleAsync(user, Constants.Jwt.JwtRoles.ApiAccessStudent);
 
             return Ok($"У пользователя: {user.UserName} удалены права студента");
         }

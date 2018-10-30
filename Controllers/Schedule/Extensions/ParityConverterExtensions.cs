@@ -1,8 +1,8 @@
-namespace EACA_API.Controllers
+namespace EACA_API.Controllers.ScheduleExtensions
 {
-    public static class ParityConverter
+    public static class ParityConverterExtensions
     {
-        public static string ParityConvert(this string parity)
+        public static string ParityConverterExtension(this string parity)
         {
             parity = parity.ToLower();
             switch (parity)
