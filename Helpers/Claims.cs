@@ -1,9 +1,9 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using EACA_API.Models.Entities;
 using System.Collections.Generic;
 using EACA_API.Services;
+using EACA_API.Models.Account;
 
 namespace EACA_API.Helpers
 {

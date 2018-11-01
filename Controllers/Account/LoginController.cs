@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using EACA_API.Models;
-using EACA_API.Models.Entities;
 using EACA_API.ViewModels;
 using EACA_API.Data;
 using EACA_API.Services;
+using EACA_API.Models.Account;
 
 namespace EACA_API.Controllers.Account
 {
-    [Route("api/accounts/[controller]")]
+    [Route("api/account/[controller]")]
     public class LoginController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -33,7 +33,7 @@ namespace EACA_API.Controllers.Account
         /// <response code="200">Возвращает идентификатор пользователя(id), jwt-токен и время истечения токена</response>
         /// <response code="400">Возвращает файл json с некоторой информацией об ошибках</response>
         /// <returns>Возвращает jwt токен</returns>
-        // POST api/accounts/login/
+        // POST api/account/login/
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]CredentialsViewModel credentials)
         {

@@ -19,37 +19,7 @@ namespace EACA_API.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("EACA_API.Models.AccountEntities.Tokens.RefreshToken", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(450);
-
-                    b.Property<DateTime>("ExpiresUtc");
-
-                    b.Property<DateTime>("IssuedUtc");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasMaxLength(450);
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasMaxLength(450);
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Token")
-                        .HasName("refreshToken_Token");
-
-
-                    b.HasAlternateKey("UserId")
-                        .HasName("refreshToken_UserId");
-
-                    b.ToTable("AspNetRefreshTokens");
-                });
-
-            modelBuilder.Entity("EACA_API.Models.Entities.Admin", b =>
+            modelBuilder.Entity("EACA_API.Models.Account.Admin", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -66,7 +36,7 @@ namespace EACA_API.Migrations
                     b.ToTable("Admins");
                 });
 
-            modelBuilder.Entity("EACA_API.Models.Entities.ApiUser", b =>
+            modelBuilder.Entity("EACA_API.Models.Account.ApiUser", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -123,11 +93,32 @@ namespace EACA_API.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("EACA_API.Models.Entities.Student", b =>
+            modelBuilder.Entity("EACA_API.Models.Account.Instructor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("HireDate");
+
+                    b.Property<string>("IdentityId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdentityId");
+
+                    b.ToTable("Instructors");
+                });
+
+            modelBuilder.Entity("EACA_API.Models.Account.Student", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("EnrollmentDate");
+
+                    b.Property<string>("Gradebook");
 
                     b.Property<string>("Group");
 
@@ -140,6 +131,107 @@ namespace EACA_API.Migrations
                     b.HasIndex("IdentityId");
 
                     b.ToTable("Students");
+                });
+
+            modelBuilder.Entity("EACA_API.Models.AccountEntities.Tokens.RefreshToken", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(450);
+
+                    b.Property<DateTime>("ExpiresUtc");
+
+                    b.Property<DateTime>("IssuedUtc");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(450);
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(450);
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Token")
+                        .HasName("refreshToken_Token");
+
+
+                    b.HasAlternateKey("UserId")
+                        .HasName("refreshToken_UserId");
+
+                    b.ToTable("AspNetRefreshTokens");
+                });
+
+            modelBuilder.Entity("EACA_API.Models.Institute.Course", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Credits");
+
+                    b.Property<string>("DepartmentId");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("EACA_API.Models.Institute.CourseAssignment", b =>
+                {
+                    b.Property<string>("CourseId");
+
+                    b.Property<string>("InstructorId");
+
+                    b.Property<int?>("InstructorId1");
+
+                    b.HasKey("CourseId", "InstructorId");
+
+                    b.HasIndex("InstructorId1");
+
+                    b.ToTable("CourseAssignments");
+                });
+
+            modelBuilder.Entity("EACA_API.Models.Institute.Department", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Budget");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Departments");
+                });
+
+            modelBuilder.Entity("EACA_API.Models.Institute.Enrollment", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool?>("Complete");
+
+                    b.Property<string>("CourseId");
+
+                    b.Property<string>("Grade");
+
+                    b.Property<string>("StudentId");
+
+                    b.Property<int?>("StudentId1");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("StudentId1");
+
+                    b.ToTable("Enrollment");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -252,26 +344,63 @@ namespace EACA_API.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("EACA_API.Models.Account.Admin", b =>
+                {
+                    b.HasOne("EACA_API.Models.Account.ApiUser", "Identity")
+                        .WithMany()
+                        .HasForeignKey("IdentityId");
+                });
+
+            modelBuilder.Entity("EACA_API.Models.Account.Instructor", b =>
+                {
+                    b.HasOne("EACA_API.Models.Account.ApiUser", "Identity")
+                        .WithMany()
+                        .HasForeignKey("IdentityId");
+                });
+
+            modelBuilder.Entity("EACA_API.Models.Account.Student", b =>
+                {
+                    b.HasOne("EACA_API.Models.Account.ApiUser", "Identity")
+                        .WithMany()
+                        .HasForeignKey("IdentityId");
+                });
+
             modelBuilder.Entity("EACA_API.Models.AccountEntities.Tokens.RefreshToken", b =>
                 {
-                    b.HasOne("EACA_API.Models.Entities.ApiUser", "User")
+                    b.HasOne("EACA_API.Models.Account.ApiUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("EACA_API.Models.Entities.Admin", b =>
+            modelBuilder.Entity("EACA_API.Models.Institute.Course", b =>
                 {
-                    b.HasOne("EACA_API.Models.Entities.ApiUser", "Identity")
-                        .WithMany()
-                        .HasForeignKey("IdentityId");
+                    b.HasOne("EACA_API.Models.Institute.Department", "Departament")
+                        .WithMany("Courses")
+                        .HasForeignKey("DepartmentId");
                 });
 
-            modelBuilder.Entity("EACA_API.Models.Entities.Student", b =>
+            modelBuilder.Entity("EACA_API.Models.Institute.CourseAssignment", b =>
                 {
-                    b.HasOne("EACA_API.Models.Entities.ApiUser", "Identity")
+                    b.HasOne("EACA_API.Models.Institute.Course", "Course")
+                        .WithMany("CourseAssignment")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EACA_API.Models.Account.Instructor", "Instructor")
+                        .WithMany("CourseAssignments")
+                        .HasForeignKey("InstructorId1");
+                });
+
+            modelBuilder.Entity("EACA_API.Models.Institute.Enrollment", b =>
+                {
+                    b.HasOne("EACA_API.Models.Institute.Course", "Course")
                         .WithMany()
-                        .HasForeignKey("IdentityId");
+                        .HasForeignKey("CourseId");
+
+                    b.HasOne("EACA_API.Models.Account.Student", "Student")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("StudentId1");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -284,7 +413,7 @@ namespace EACA_API.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("EACA_API.Models.Entities.ApiUser")
+                    b.HasOne("EACA_API.Models.Account.ApiUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -292,7 +421,7 @@ namespace EACA_API.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("EACA_API.Models.Entities.ApiUser")
+                    b.HasOne("EACA_API.Models.Account.ApiUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -305,7 +434,7 @@ namespace EACA_API.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("EACA_API.Models.Entities.ApiUser")
+                    b.HasOne("EACA_API.Models.Account.ApiUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -313,7 +442,7 @@ namespace EACA_API.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("EACA_API.Models.Entities.ApiUser")
+                    b.HasOne("EACA_API.Models.Account.ApiUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

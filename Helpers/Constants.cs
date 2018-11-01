@@ -13,6 +13,7 @@
             public static class JwtRoles
             {
                 public const string ApiAccessAdmin = "api_access_admin";
+                public const string ApiAccessInstructor = "api_access_instructor";
                 public const string ApiAccessStudent = "api_access_student";
             }
         }

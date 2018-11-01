@@ -1,4 +1,4 @@
-﻿namespace EACA_API.Models.Entities
+﻿namespace EACA_API.Models.Account
 {
     public class Admin
     {

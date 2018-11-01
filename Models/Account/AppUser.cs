@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace EACA_API.Models.Entities
+namespace EACA_API.Models.Account
 {
     public class ApiUser : IdentityUser
     {

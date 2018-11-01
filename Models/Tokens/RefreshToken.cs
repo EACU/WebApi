@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using EACA_API.Models.Entities;
+using EACA_API.Models.Account;
 
 namespace EACA_API.Models.AccountEntities.Tokens
 {

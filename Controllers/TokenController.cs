@@ -6,8 +6,8 @@ using Microsoft.Extensions.Options;
 using EACA_API.Data;
 using EACA_API.Models;
 using EACA_API.Models.AccountEntities.Tokens;
-using EACA_API.Models.Entities;
 using EACA_API.Services;
+using EACA_API.Models.Account;
 
 namespace EACA_API.Controllers
 {

@@ -2,11 +2,11 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using EACA_API.Models.Entities;
-using EACA_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using EACA_API.Data;
 using EACA_API.Helpers;
+using EACA_API.Models.Account;
 
 namespace EACA_API.Controllers.Account.Roles
 {

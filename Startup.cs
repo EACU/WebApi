@@ -17,16 +17,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
-using EACA_API.Models.Entities;
-using EACA_API.Models;
-using EACA_API.Helpers;
 using EACA_API.Data;
+using EACA_API.Models.Account;
+using EACA_API.Models;
+using EACA_API.Services;
+using EACA_API.Controllers.ScheduleApi.Services;
 
 using FluentValidation.AspNetCore;
 using AutoMapper;
 using Swashbuckle.AspNetCore.Swagger;
-using EACA_API.Controllers.ScheduleApi.Services;
-using EACA_API.Services;
+
 
 namespace EACA_API
 {
