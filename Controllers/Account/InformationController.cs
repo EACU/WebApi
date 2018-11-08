@@ -10,7 +10,7 @@ using EACA_API.Data;
 namespace EACA_API.Controllers.Account
 {
     [Authorize]
-    [Route("api/accounts/[controller]")]
+    [Route("api/account/[controller]")]
     public class InformationController : Controller
     {
         private readonly ApplicationDbContext _context;

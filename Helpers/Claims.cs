@@ -33,7 +33,7 @@ namespace EACA_API.Helpers
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Id),
                 new Claim("name", $"{user.FirstName} {user.LastName}"),
-                new Claim("pic", user.PictureUrl)
+                new Claim("pic", $"{user.PictureUrl}")
             };
 
             foreach (var role in roles)
