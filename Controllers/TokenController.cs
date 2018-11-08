@@ -35,7 +35,7 @@ namespace EACA_API.Controllers
             if (refreshToken == null)
                 return BadRequest();
 
-            var identity = Helpers.Claims.GenerateClaimsIdentity(refreshToken.User.UserName, refreshToken.UserId, await _userManager.GetRolesAsync(refreshToken.User));
+            var identity = Helpers.Claims.GenerateClaimsIdentity(refreshToken.User, await _userManager.GetRolesAsync(refreshToken.User));
 
             var jwt = await Helpers.Tokens.GenerateJwt(_context, identity, _jwtFactory, refreshToken.User.UserName, _jwtOptions);
 

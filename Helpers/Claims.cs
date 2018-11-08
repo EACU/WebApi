@@ -21,24 +21,26 @@ namespace EACA_API.Helpers
             if (await userManager.CheckPasswordAsync(userToVerify, password))
             {
                 var userRoles = await userManager.GetRolesAsync(userToVerify);
-                return await Task.FromResult(GenerateClaimsIdentity(userName, userToVerify.Id, userRoles));
+                return await Task.FromResult(GenerateClaimsIdentity(userToVerify, userRoles));
             }
 
             return await Task.FromResult<ClaimsIdentity>(null);
         }
 
-        public static ClaimsIdentity GenerateClaimsIdentity(string userName, string id, IList<string> roles)
+        public static ClaimsIdentity GenerateClaimsIdentity(ApiUser user, IList<string> roles)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, id),
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Id),
+                new Claim("name", $"{user.FirstName} {user.LastName}"),
+                new Claim("pic", user.PictureUrl)
             };
 
             foreach (var role in roles)
+            {
                 claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, role));
-
-            foreach (var role in roles)
                 claims.Add(new Claim("rol", role));
+            }
 
             return new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
         }
