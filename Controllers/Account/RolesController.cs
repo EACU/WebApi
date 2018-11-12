@@ -2,17 +2,18 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using EACA_API.Data;
 using EACA_API.Helpers;
 using EACA_API.Models.Account;
+using EACA_API.ViewModels.Accounts.RolesViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace EACA_API.Controllers.Account.Roles
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize(Roles = "api_access_admin")]
-    [Route("api/accounts/[controller]/[action]")]
+    [Route("api/account/[controller]/[action]")]
     public class RolesController : Controller
     {
         RoleManager<IdentityRole> _roleManager;
@@ -38,104 +39,99 @@ namespace EACA_API.Controllers.Account.Roles
             if (await _roleManager.RoleExistsAsync(name))
                 return BadRequest(Errors.AddErrorToModelState("roles_errors", "Роль с таким именем уже существует", ModelState));
 
-            IdentityResult result = await _roleManager.CreateAsync(new IdentityRole(name));
+            var result = await _roleManager.CreateAsync(new IdentityRole(name));
+            if (!result.Succeeded)
+                return BadRequest(Errors.AddIdentityErrorsToModelState(result, ModelState));
+
             return Ok($"Роль {name} успешно созданна");
         }
 
         [HttpPost]
-        public async Task<IActionResult> UserRoles([FromBody]ApiUser requestUser)
+        public async Task<IActionResult> UserRoles([FromBody]UserRoleViewModel body)
         {
-            ApiUser user = await _userManager.FindByIdAsync(requestUser.Id);
+            var user = await _userManager.FindByIdAsync(body.Id);
 
             if (user == null)
                 return BadRequest(Errors.AddErrorToModelState("roles_errors", "Такого пользователя не существует", ModelState));
 
-            var userRoles = await _userManager.GetRolesAsync(user);
+            var roles = await _userManager.GetRolesAsync(user);
 
-            return Ok(new { userId = user.Id, userRoles });
+            return Ok(new { roles });
          }
 
         [HttpPost]
-        public async Task<IActionResult> AddAdministatorRole([FromBody]ApiUser requestUser)
+        public async Task<IActionResult> AddRoleUser([FromBody]UserRoleViewModel body)
         {
-            ApiUser user = await _userManager.FindByIdAsync(requestUser.Id);
-
+            var user = await _userManager.FindByIdAsync(body.Id);
             if (user == null)
                 return BadRequest(Errors.AddErrorToModelState("roles_errors", "Такого пользователя не существует", ModelState));
 
-            var userRoles = await _userManager.GetRolesAsync(user);
+            if (!await _roleManager.RoleExistsAsync(body.Role))
+                return BadRequest(Errors.AddErrorToModelState("roles_errors", $"Роли: '{body.Role}' - не существует", ModelState));
 
-            if (userRoles.Contains(Constants.Jwt.JwtRoles.ApiAccessAdmin))
-                return BadRequest(Errors.AddErrorToModelState("roles_errors", $"У пользователя: {user.UserName} уже есть права администратора", ModelState));
+            if (await _userManager.IsInRoleAsync(user, body.Role))
+                return BadRequest(Errors.AddErrorToModelState("roles_errors", $"Пользователь: '{body.Id}' уже имеет эту роль: {body.Role}", ModelState));
 
-            await _userManager.AddToRoleAsync(user, Constants.Jwt.JwtRoles.ApiAccessAdmin);
+            var result = await _userManager.AddToRoleAsync(user, body.Role);
+            if (!result.Succeeded)
+                return BadRequest(Errors.AddIdentityErrorsToModelState(result, ModelState));
 
-            await _appDbContext.Admins.AddAsync(new Admin { IdentityId = requestUser.Id });
+            switch (body.Role)
+            {
+                case Constants.Jwt.JwtRoles.ApiAccessAdmin:
+                    await _appDbContext.Admins.AddAsync(new Admin { IdentityId = user.Id });
+                    break;
+
+                case Constants.Jwt.JwtRoles.ApiAccessInstructor:
+                    await _appDbContext.Instructors.AddAsync(new Instructor { IdentityId = user.Id });
+                    break;
+
+                case Constants.Jwt.JwtRoles.ApiAccessStudent:
+                    await _appDbContext.Students.AddAsync(new Student { IdentityId = user.Id });
+                    break;
+            }
             await _appDbContext.SaveChangesAsync();
 
-            return Ok($"Пользователь: {user.UserName} получил права администратора");
+            return Ok($"Пользователь: '{body.Id}' получил роль: '{body.Role}'");
         }
 
-        [HttpPost]
-        public async Task<IActionResult> DeleteAdministatorRole([FromBody]ApiUser requestUser)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteRoleUser([FromBody]UserRoleViewModel body)
         {
-            ApiUser user = await _userManager.FindByIdAsync(requestUser.Id);
-
+            var user = await _userManager.FindByIdAsync(body.Id);
             if (user == null)
                 return BadRequest(Errors.AddErrorToModelState("roles_errors", "Такого пользователя не существует", ModelState));
 
-            Admin userAdmin = await _appDbContext.Admins.SingleOrDefaultAsync(x => x.IdentityId == requestUser.Id);
+            if (!await _roleManager.RoleExistsAsync(body.Role))
+                return BadRequest(Errors.AddErrorToModelState("roles_errors", $"Роли: '{body.Role}' - не существует", ModelState));
 
-            if (userAdmin == null)
-                return BadRequest(Errors.AddErrorToModelState("roles_errors", $"У пользователя: {user.UserName} нет прав администратора", ModelState));
+            if (!await _userManager.IsInRoleAsync(user, body.Role))
+                return BadRequest(Errors.AddErrorToModelState("roles_errors", $"Пользователь: '{body.Id}' не имеет роли: {body.Role}", ModelState));
 
-            _appDbContext.Admins.Remove(userAdmin);
+            var result = await _userManager.RemoveFromRoleAsync(user, body.Role);
+            if (!result.Succeeded)
+                return BadRequest(Errors.AddIdentityErrorsToModelState(result, ModelState));
+
+            switch (body.Role)
+            {
+                case Constants.Jwt.JwtRoles.ApiAccessAdmin:
+                    var adminAccount = await _appDbContext.Admins.SingleOrDefaultAsync(x => x.IdentityId == body.Id);
+                    _appDbContext.Admins.Remove(adminAccount);
+                    break;
+
+                case Constants.Jwt.JwtRoles.ApiAccessInstructor:
+                    var instructorAccount = await _appDbContext.Instructors.SingleOrDefaultAsync(x => x.IdentityId == body.Id);
+                    _appDbContext.Instructors.Remove(instructorAccount);
+                    break;
+
+                case Constants.Jwt.JwtRoles.ApiAccessStudent:
+                    var studentAccount = await _appDbContext.Students.SingleOrDefaultAsync(x => x.IdentityId == body.Id);
+                    _appDbContext.Students.Remove(studentAccount);
+                    break;
+            }
             await _appDbContext.SaveChangesAsync();
 
-            await _userManager.RemoveFromRoleAsync(user, Constants.Jwt.JwtRoles.ApiAccessAdmin);
-
-            return Ok($"У пользователя: {user.UserName} удалены права администратора");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AddStudentRole([FromBody]ApiUser requestUser)
-        {
-            ApiUser user = await _userManager.FindByIdAsync(requestUser.Id);
-
-            if (user == null)
-                return BadRequest(Errors.AddErrorToModelState("roles_errors", "Такого пользователя не существует", ModelState));
-
-            var userRoles = await _userManager.GetRolesAsync(user);
-            if (userRoles.Contains(Constants.Jwt.JwtRoles.ApiAccessStudent))
-                return BadRequest(Errors.AddErrorToModelState("roles_errors", $"У пользователя: {user.UserName} уже есть права студента", ModelState));
-
-            await _userManager.AddToRoleAsync(user, Constants.Jwt.JwtRoles.ApiAccessStudent);
-
-            await _appDbContext.Students.AddAsync(new Student { IdentityId = requestUser.Id });
-            await _appDbContext.SaveChangesAsync();
-
-            return Ok($"Пользователь: {user.UserName} получил права студента");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> DeleteStudentRole([FromBody]ApiUser requestUser)
-        {
-            ApiUser user = await _userManager.FindByIdAsync(requestUser.Id);
-
-            if (user == null)
-                return BadRequest(Errors.AddErrorToModelState("roles_errors", "Такого пользователя не существует", ModelState));
-
-            Student userStudent = await _appDbContext.Students.SingleOrDefaultAsync(x => x.IdentityId == requestUser.Id);
-
-            if (userStudent == null)
-                return BadRequest(Errors.AddErrorToModelState("roles_errors", $"У пользователя: {user.UserName} нет прав студента", ModelState));
-
-            _appDbContext.Students.Remove(userStudent);
-            await _appDbContext.SaveChangesAsync();
-
-            await _userManager.RemoveFromRoleAsync(user, Constants.Jwt.JwtRoles.ApiAccessStudent);
-
-            return Ok($"У пользователя: {user.UserName} удалены права студента");
+            return Ok($"У пользователя: '{body.Id}' успешно удалена роль: '{body.Role}'");
         }
     }
 }
