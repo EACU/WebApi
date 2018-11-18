@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using EACA_API.Models;
+using EACA_API.Models.Schedule;
 using EACA_API.Controllers.ScheduleApi.Services;
 
 namespace EACA_API.Controllers.ExcelSchedule
@@ -37,7 +37,7 @@ namespace EACA_API.Controllers.ExcelSchedule
         /// </summary>
         [HttpGet]
         [Route("getGroupList")]
-        public IEnumerable<Group> GetGroupList() => _scheduleService.GetGroupsList().Groups;
+        public IEnumerable<GroupSchedule> GetGroupList() => _scheduleService.GetGroupsList().Groups;
 
         /// <summary>
         /// Возвращает список пар на неделю для группы

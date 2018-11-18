@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace EACA_API.Models
+namespace EACA_API.Models.Schedule
 {
     public class ParityWeeks
     {

@@ -7,7 +7,7 @@ namespace EACA_API.Models.Account
 {
     public class Instructor
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime HireDate { get; set; }
@@ -15,6 +15,6 @@ namespace EACA_API.Models.Account
         public string IdentityId { get; set; }
         public ApiUser Identity { get; set; }
 
-        public ICollection<CourseAssignment> CourseAssignments { get; set; }
+        public ICollection<SubjectAssignment> CourseAssignments { get; set; }
     }
 }

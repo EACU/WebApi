@@ -1,4 +1,5 @@
 ﻿using EACA_API.Models.Account;
+using System;
 
 namespace EACA_API.Models.Institute
 {
@@ -7,9 +8,10 @@ namespace EACA_API.Models.Institute
         public string Id { get; set; }
         public bool? Complete { get; set; }
         public string Grade { get; set; }
+        public DateTime Date { get; set; }
 
-        public string CourseId { get; set; }
-        public Course Course { get; set; }
+        public string SubjectId { get; set; }
+        public Subject Subject { get; set; }
 
         public string StudentId { get; set; }
         public Student Student { get; set; }

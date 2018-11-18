@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EACA_API.Models
+namespace EACA_API.Models.Schedule
 {
     public class GroupsList
     {
-        public List<Group> Groups { get; set; } = new List<Group>();
+        public List<GroupSchedule> Groups { get; set; } = new List<GroupSchedule>();
 
         public bool Contains(int groupId)
         {

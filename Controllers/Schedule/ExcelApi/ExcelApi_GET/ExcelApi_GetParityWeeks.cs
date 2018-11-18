@@ -1,4 +1,4 @@
-using EACA_API.Models;
+using EACA_API.Models.Schedule;
 
 namespace EACA_API.Controllers.ExcelSchedule
 {

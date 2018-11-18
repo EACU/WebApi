@@ -49,7 +49,7 @@ namespace EACA_API.Controllers.Account
             await _userManager.AddToRoleAsync(userIdentity, Constants.Jwt.JwtRoles.ApiAccessStudent);
 
             await _appDbContext.Students.AddAsync(
-                new Student { IdentityId = userIdentity.Id, Group = model.Group, Gradebook = model.Gradebook, Headman = model.Headman });
+                new Student { IdentityId = userIdentity.Id, GroupId = model.GroupId, Gradebook = model.Gradebook, Headman = model.Headman });
             await _appDbContext.SaveChangesAsync();
 
             return Ok($"Аккаунт {model.Email} успешно создан!");

@@ -11,7 +11,7 @@ namespace EACA_API.ViewModels.Validations
             RuleFor(vm => vm.FirstName).NotEmpty().WithMessage("Имя не может быть пустым");
             RuleFor(vm => vm.LastName).NotEmpty().WithMessage("Фамилия не может быть пустой");
             RuleFor(vm => vm.PhoneNumber).NotEmpty().WithMessage("Номер телефона не может быть пустым");
-            RuleFor(vm => vm.Group).NotEmpty().WithMessage("Группа не может быть пустой");
+            RuleFor(vm => vm.GroupId).NotEmpty().WithMessage("Группа не может быть пустой");
             RuleFor(vm => vm.Gradebook).NotEmpty().WithMessage("Номер зачётной книжки не может быть пустым");
         }
     }

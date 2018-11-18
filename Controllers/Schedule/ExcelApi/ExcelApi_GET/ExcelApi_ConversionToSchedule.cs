@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-
-using EACA_API.Models;
-
+using EACA_API.Models.Schedule;
 using Google.Apis.Sheets.v4.Data;
 
 namespace EACA_API.Controllers.ExcelSchedule

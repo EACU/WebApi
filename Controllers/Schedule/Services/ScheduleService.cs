@@ -3,8 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using EACA_API.Controllers.ExcelSchedule;
 using EACA_API.Controllers.ScheduleExtensions;
-using EACA_API.Models;
 using EACA_API.Helpers;
+using EACA_API.Models.Schedule;
 
 namespace EACA_API.Controllers.ScheduleApi.Services
 {
@@ -15,7 +15,7 @@ namespace EACA_API.Controllers.ScheduleApi.Services
 
         public ScheduleService()
         {
-            GroupsList.Groups = Serializer.Deserialize<Response<Group>>("groups_list.json").ListGroups;
+            GroupsList.Groups = Serializer.Deserialize<Response<GroupSchedule>>("groups_list.json").ListGroups;
         }
 
         public GroupsList GetGroupsList() => GroupsList;

@@ -2,7 +2,7 @@
 {
     public class Admin
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Passport { get; set; }
 
         public string IdentityId { get; set; }

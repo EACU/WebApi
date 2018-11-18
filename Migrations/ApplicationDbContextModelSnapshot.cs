@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace EACA_API.Migrations
+namespace EACAAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -21,9 +21,8 @@ namespace EACA_API.Migrations
 
             modelBuilder.Entity("EACA_API.Models.Account.Admin", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("IdentityId");
 
@@ -95,9 +94,8 @@ namespace EACA_API.Migrations
 
             modelBuilder.Entity("EACA_API.Models.Account.Instructor", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("HireDate");
 
@@ -112,21 +110,26 @@ namespace EACA_API.Migrations
 
             modelBuilder.Entity("EACA_API.Models.Account.Student", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("EnrollmentDate");
 
-                    b.Property<string>("Gradebook");
+                    b.Property<string>("Gradebook")
+                        .IsRequired();
 
-                    b.Property<string>("Group");
+                    b.Property<string>("GroupId")
+                        .IsRequired();
 
-                    b.Property<bool?>("Headman");
+                    b.Property<bool?>("Headman")
+                        .IsRequired();
 
-                    b.Property<string>("IdentityId");
+                    b.Property<string>("IdentityId")
+                        .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
 
                     b.HasIndex("IdentityId");
 
@@ -168,11 +171,20 @@ namespace EACA_API.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Credits");
+                    b.Property<bool>("Budget");
 
-                    b.Property<string>("DepartmentId");
+                    b.Property<long>("Cost");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("DepartmentId")
+                        .IsRequired();
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<string>("PeriodOfStudy")
+                        .IsRequired();
+
+                    b.Property<int>("Year");
 
                     b.HasKey("Id");
 
@@ -181,31 +193,23 @@ namespace EACA_API.Migrations
                     b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("EACA_API.Models.Institute.CourseAssignment", b =>
-                {
-                    b.Property<string>("CourseId");
-
-                    b.Property<string>("InstructorId");
-
-                    b.Property<int?>("InstructorId1");
-
-                    b.HasKey("CourseId", "InstructorId");
-
-                    b.HasIndex("InstructorId1");
-
-                    b.ToTable("CourseAssignments");
-                });
-
             modelBuilder.Entity("EACA_API.Models.Institute.Department", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("Budget");
+                    b.Property<string>("Code")
+                        .IsRequired();
 
-                    b.Property<string>("Name");
+                    b.Property<string>("FacultyId")
+                        .IsRequired();
+
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FacultyId");
 
                     b.ToTable("Departments");
                 });
@@ -217,21 +221,91 @@ namespace EACA_API.Migrations
 
                     b.Property<bool?>("Complete");
 
-                    b.Property<string>("CourseId");
+                    b.Property<DateTime>("Date");
 
                     b.Property<string>("Grade");
 
                     b.Property<string>("StudentId");
 
-                    b.Property<int?>("StudentId1");
+                    b.Property<string>("SubjectId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("Enrollments");
+                });
+
+            modelBuilder.Entity("EACA_API.Models.Institute.Faculty", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Faculties");
+                });
+
+            modelBuilder.Entity("EACA_API.Models.Institute.Group", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CourseId")
+                        .IsRequired();
+
+                    b.Property<string>("HeadmanId")
+                        .IsRequired();
+
+                    b.Property<int>("Name");
+
+                    b.Property<int>("Year");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
 
-                    b.HasIndex("StudentId1");
+                    b.HasIndex("HeadmanId");
 
-                    b.ToTable("Enrollment");
+                    b.ToTable("Groups");
+                });
+
+            modelBuilder.Entity("EACA_API.Models.Institute.Subject", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CourseId");
+
+                    b.Property<string>("Credits");
+
+                    b.Property<int>("HoursInSemester");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("Subjects");
+                });
+
+            modelBuilder.Entity("EACA_API.Models.Institute.SubjectAssignment", b =>
+                {
+                    b.Property<string>("SubjectId");
+
+                    b.Property<string>("InstructorId");
+
+                    b.HasKey("SubjectId", "InstructorId");
+
+                    b.HasIndex("InstructorId");
+
+                    b.ToTable("SubjectAssignments");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -360,9 +434,15 @@ namespace EACA_API.Migrations
 
             modelBuilder.Entity("EACA_API.Models.Account.Student", b =>
                 {
+                    b.HasOne("EACA_API.Models.Institute.Group", "Group")
+                        .WithMany("Students")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("EACA_API.Models.Account.ApiUser", "Identity")
                         .WithMany()
-                        .HasForeignKey("IdentityId");
+                        .HasForeignKey("IdentityId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("EACA_API.Models.AccountEntities.Tokens.RefreshToken", b =>
@@ -375,32 +455,62 @@ namespace EACA_API.Migrations
 
             modelBuilder.Entity("EACA_API.Models.Institute.Course", b =>
                 {
-                    b.HasOne("EACA_API.Models.Institute.Department", "Departament")
-                        .WithMany("Courses")
-                        .HasForeignKey("DepartmentId");
+                    b.HasOne("EACA_API.Models.Institute.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("EACA_API.Models.Institute.CourseAssignment", b =>
+            modelBuilder.Entity("EACA_API.Models.Institute.Department", b =>
                 {
-                    b.HasOne("EACA_API.Models.Institute.Course", "Course")
-                        .WithMany("CourseAssignment")
-                        .HasForeignKey("CourseId")
+                    b.HasOne("EACA_API.Models.Institute.Faculty", "Faculty")
+                        .WithMany()
+                        .HasForeignKey("FacultyId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("EACA_API.Models.Account.Instructor", "Instructor")
-                        .WithMany("CourseAssignments")
-                        .HasForeignKey("InstructorId1");
                 });
 
             modelBuilder.Entity("EACA_API.Models.Institute.Enrollment", b =>
                 {
-                    b.HasOne("EACA_API.Models.Institute.Course", "Course")
-                        .WithMany()
-                        .HasForeignKey("CourseId");
-
                     b.HasOne("EACA_API.Models.Account.Student", "Student")
                         .WithMany("Enrollments")
-                        .HasForeignKey("StudentId1");
+                        .HasForeignKey("StudentId");
+
+                    b.HasOne("EACA_API.Models.Institute.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId");
+                });
+
+            modelBuilder.Entity("EACA_API.Models.Institute.Group", b =>
+                {
+                    b.HasOne("EACA_API.Models.Institute.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EACA_API.Models.Account.ApiUser", "Headman")
+                        .WithMany()
+                        .HasForeignKey("HeadmanId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("EACA_API.Models.Institute.Subject", b =>
+                {
+                    b.HasOne("EACA_API.Models.Institute.Course", "Course")
+                        .WithMany("Subjects")
+                        .HasForeignKey("CourseId");
+                });
+
+            modelBuilder.Entity("EACA_API.Models.Institute.SubjectAssignment", b =>
+                {
+                    b.HasOne("EACA_API.Models.Account.Instructor", "Instructor")
+                        .WithMany("CourseAssignments")
+                        .HasForeignKey("InstructorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EACA_API.Models.Institute.Subject", "Subject")
+                        .WithMany("SubjectAssignment")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

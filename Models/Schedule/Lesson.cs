@@ -1,4 +1,4 @@
-namespace EACA_API.Models
+namespace EACA_API.Models.Schedule
 {
     public class Lesson
     {

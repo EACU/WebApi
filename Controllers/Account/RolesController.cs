@@ -12,7 +12,6 @@ using Microsoft.EntityFrameworkCore;
 namespace EACA_API.Controllers.Account.Roles
 {
     [ApiExplorerSettings(IgnoreApi = true)]
-    [Authorize(Roles = "api_access_admin")]
     [Route("api/account/[controller]/[action]")]
     public class RolesController : Controller
     {

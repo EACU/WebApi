@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EACA_API.Models
+namespace EACA_API.Models.Schedule
 {
     public class Schedule
     {
