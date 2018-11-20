@@ -13,19 +13,10 @@ namespace EACA_API.Models.Account
         public string Gradebook { get; set; }
 
         [Required]
-        public bool? Headman { get; set; }
+        public string ApiUserId { get; set; }
+        public ApiUser ApiUser { get; set; }
 
-        [Required]
-        [DataType(DataType.Date)]
-        public DateTime EnrollmentDate { get; set; }
-
-        [Required]
-        public string IdentityId { get; set; }
-        public ApiUser Identity { get; set; }
-
-        [Required]
-        public string GroupId { get; set; }
-        public Group Group { get; set; }
+        public ICollection<StudentGroup> StudentGroups { get; set; }
 
         public ICollection<Enrollment> Enrollments { get; set; }
     }

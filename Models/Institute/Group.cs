@@ -9,14 +9,10 @@ namespace EACA_API.Models.Institute
         public string Id { get; set; }
 
         [Required]
-        public int Name { get; set; }
+        public int Number { get; set; }
 
         [Required]
-        public int Year { get; set; }
-
-        [Required]
-        public string HeadmanId { get; set; }
-        public ApiUser Headman { get; set; }
+        public bool Active { get; set; }
 
         [Required]
         public string CourseId { get; set; }

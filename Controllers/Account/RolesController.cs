@@ -86,7 +86,7 @@ namespace EACA_API.Controllers.Account.Roles
                     break;
 
                 case Constants.Jwt.JwtRoles.ApiAccessStudent:
-                    await _appDbContext.Students.AddAsync(new Student { IdentityId = user.Id });
+                    await _appDbContext.Students.AddAsync(new Student { ApiUserId = user.Id });
                     break;
             }
             await _appDbContext.SaveChangesAsync();
@@ -124,7 +124,7 @@ namespace EACA_API.Controllers.Account.Roles
                     break;
 
                 case Constants.Jwt.JwtRoles.ApiAccessStudent:
-                    var studentAccount = await _appDbContext.Students.SingleOrDefaultAsync(x => x.IdentityId == body.Id);
+                    var studentAccount = await _appDbContext.Students.SingleOrDefaultAsync(x => x.ApiUserId == body.Id);
                     _appDbContext.Students.Remove(studentAccount);
                     break;
             }

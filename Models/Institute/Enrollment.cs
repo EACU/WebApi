@@ -10,6 +10,9 @@ namespace EACA_API.Models.Institute
         public string Grade { get; set; }
         public DateTime Date { get; set; }
 
+        public string GroupId { get; set; }
+        public Group Group { get; set; }
+
         public string SubjectId { get; set; }
         public Subject Subject { get; set; }
 
