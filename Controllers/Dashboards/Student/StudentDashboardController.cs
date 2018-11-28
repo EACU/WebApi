@@ -23,14 +23,14 @@ namespace EACA_API.Controllers
             _caller = httpContextAccessor.HttpContext.User;
         }
 
-        // GET /api/student/dashboard/
-        //[HttpGet]
-        //public async Task<IActionResult> Dashboard()
-        //{
-        //    var userId = _caller.Claims.Single(c => c.Type == ClaimsIdentity.DefaultNameClaimType);
-        //    var student = await _context.Students.Include(c => c.ApiUser).SingleAsync(c => c.ApiUser.Id == userId.Value);
-            
-        //    return Ok(new { student.ApiUser.FirstName, student.ApiUser.LastName, student.ApiUser.PictureUrl, student.Headman, student.Group});
-        //}
+        [HttpGet]
+        public async Task<IActionResult> Dashboard()
+        {
+            var userId = _caller.Claims.Single(c => c.Type == ClaimsIdentity.DefaultNameClaimType);
+
+            var student = await _context.Students.Include(c => c.ApiUser).Include(x => x.StudentGroups).ThenInclude(x => x.Group).SingleAsync(c => c.ApiUser.Id == userId.Value);
+
+            return Ok(student);
+        }
     }
 }

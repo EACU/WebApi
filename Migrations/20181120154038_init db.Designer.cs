@@ -4,14 +4,16 @@ using EACA_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EACAAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181120154038_init db")]
+    partial class initdb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,9 +118,16 @@ namespace EACAAPI.Migrations
                     b.Property<string>("ApiUserId")
                         .IsRequired();
 
+                    b.Property<string>("Gradebook")
+                        .IsRequired();
+
+                    b.Property<string>("GroupId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ApiUserId");
+
+                    b.HasIndex("GroupId");
 
                     b.ToTable("Students");
                 });
@@ -289,13 +298,11 @@ namespace EACAAPI.Migrations
 
                     b.Property<string>("GroupId");
 
-                    b.Property<string>("Gradebook");
-
                     b.HasKey("StudentId", "GroupId");
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("StudentGroups");
+                    b.ToTable("StudentCourses");
                 });
 
             modelBuilder.Entity("EACA_API.Models.Institute.Subject", b =>
@@ -461,6 +468,10 @@ namespace EACAAPI.Migrations
                         .WithMany()
                         .HasForeignKey("ApiUserId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EACA_API.Models.Institute.Group")
+                        .WithMany("Students")
+                        .HasForeignKey("GroupId");
                 });
 
             modelBuilder.Entity("EACA_API.Models.AccountEntities.Tokens.RefreshToken", b =>
@@ -517,7 +528,7 @@ namespace EACAAPI.Migrations
             modelBuilder.Entity("EACA_API.Models.Institute.StudentGroup", b =>
                 {
                     b.HasOne("EACA_API.Models.Institute.Group", "Group")
-                        .WithMany("StudentGroups")
+                        .WithMany()
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade);
 

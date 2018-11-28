@@ -4,14 +4,16 @@ using EACA_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EACAAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181128174430_rename studentcourses")]
+    partial class renamestudentcourses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -114,6 +116,9 @@ namespace EACAAPI.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("ApiUserId")
+                        .IsRequired();
+
+                    b.Property<string>("Gradebook")
                         .IsRequired();
 
                     b.HasKey("Id");
@@ -288,8 +293,6 @@ namespace EACAAPI.Migrations
                     b.Property<string>("StudentId");
 
                     b.Property<string>("GroupId");
-
-                    b.Property<string>("Gradebook");
 
                     b.HasKey("StudentId", "GroupId");
 

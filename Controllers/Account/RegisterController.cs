@@ -9,6 +9,8 @@ using EACA_API.ViewModels;
 using AutoMapper;
 using EACA_API.Helpers;
 using EACA_API.Models.Account;
+using Microsoft.EntityFrameworkCore;
+using EACA_API.Models.Institute;
 
 namespace EACA_API.Controllers.Account
 {
@@ -46,30 +48,18 @@ namespace EACA_API.Controllers.Account
 
             if (!result.Succeeded) return BadRequest(Errors.AddIdentityErrorsToModelState(result, ModelState));
 
+            var group = await _appDbContext.Groups.SingleAsync(x => x.Number == model.Group);
+
+            if (group == null)
+                return BadRequest(Errors.AddErrorToModelState("group", "такой группы не существует", ModelState));
+
             await _userManager.AddToRoleAsync(userIdentity, Constants.Jwt.JwtRoles.ApiAccessStudent);
 
-            //await _appDbContext.Students.AddAsync(
-            //    new Student { ApiUserId = userIdentity.Id, GroupId = model.GroupId, Gradebook = model.Gradebook, Headman = model.Headman });
-            //await _appDbContext.SaveChangesAsync();
+            await _appDbContext.Students.AddAsync(new Student { ApiUserId = userIdentity.Id});
+            await _appDbContext.SaveChangesAsync();
 
-            return Ok($"Аккаунт {model.Email} успешно создан!");
-        }
-
-        // POST api/account/register/instructor
-        [HttpPost]
-        public async Task<IActionResult> Instructor([FromBody]RegistrationInstructorViewModel model)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
-            var userIdentity = _mapper.Map<ApiUser>(model);
-
-            var result = await _userManager.CreateAsync(userIdentity, model.Password);
-
-            if (!result.Succeeded) return BadRequest(Errors.AddIdentityErrorsToModelState(result, ModelState));
-
-            await _userManager.AddToRoleAsync(userIdentity, Constants.Jwt.JwtRoles.ApiAccessInstructor);
-
-            await _appDbContext.Instructors.AddAsync(new Instructor { IdentityId = userIdentity.Id });
+            var student = await _appDbContext.Students.SingleAsync(x => x.ApiUserId == userIdentity.Id);
+            await _appDbContext.StudentGroups.AddAsync(new StudentGroup { StudentId = student.Id, GroupId = group.Id, Gradebook = model.Gradebook });
             await _appDbContext.SaveChangesAsync();
 
             return Ok($"Аккаунт {model.Email} успешно создан!");

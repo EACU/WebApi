@@ -79,8 +79,10 @@ namespace EACA_API
             // AutoMapper
             services.AddAutoMapper();
 
-            // FluentValidation
-            services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+            // MVC Config
+            services.AddMvc()
+                .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
 
             // Swagger
             services.AddSwaggerGen(c =>

@@ -23,9 +23,10 @@ namespace EACA_API.Controllers.Institute
 
         // GET: api/Courses
         [HttpGet]
-        public IEnumerable<Course> GetCourses()
+        public async Task<IActionResult> GetCourses()
         {
-            return _context.Courses;
+            var courses = await _context.Courses.Include(x => x.Groups).ToListAsync();
+            return Ok(courses);
         }
 
         // GET: api/Courses/5
@@ -37,7 +38,7 @@ namespace EACA_API.Controllers.Institute
                 return BadRequest(ModelState);
             }
 
-            var course = await _context.Courses.FindAsync(id);
+            var course = await _context.Courses.Include(x => x.Groups).SingleOrDefaultAsync(x => x.Id == id);
 
             if (course == null)
             {

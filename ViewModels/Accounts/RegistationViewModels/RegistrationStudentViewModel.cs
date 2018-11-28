@@ -2,7 +2,7 @@
 {
     public class RegistrationStudentViewModel : BaseRegistationViewModel
     {
-        public string GroupId { get; set; }
+        public int Group { get; set; }
         public string Gradebook { get; set; }
         public bool Headman { get; set; }
     }

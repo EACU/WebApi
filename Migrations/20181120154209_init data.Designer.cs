@@ -4,14 +4,16 @@ using EACA_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EACAAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181120154209_init data")]
+    partial class initdata
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,9 +118,16 @@ namespace EACAAPI.Migrations
                     b.Property<string>("ApiUserId")
                         .IsRequired();
 
+                    b.Property<string>("Gradebook")
+                        .IsRequired();
+
+                    b.Property<string>("GroupId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ApiUserId");
+
+                    b.HasIndex("GroupId");
 
                     b.ToTable("Students");
                 });
@@ -180,6 +189,34 @@ namespace EACAAPI.Migrations
                     b.HasIndex("PlacesInfoId");
 
                     b.ToTable("Courses");
+
+                    b.HasData(
+                        new { Id = "c0701380-179d-4b9d-bdd8-07394deae025", DepartmentId = "1f1481fa-60d4-41f8-bb54-f3bcb1d0a4a2", FormEducation = 0, Name = "Визуальные коммуникации", PeriodOfStudy = "4 года", PlacesInfoId = "516b57e6-a922-4b19-b774-18f70aeef978", Year = 2018 },
+                        new { Id = "9c29a9ca-6860-4e66-b9a6-b341bf67d620", DepartmentId = "1f1481fa-60d4-41f8-bb54-f3bcb1d0a4a2", FormEducation = 0, Name = "Визуальные коммуникации", PeriodOfStudy = "4 года", PlacesInfoId = "516b57e6-a922-4b19-b774-18f70aeef978", Year = 2017 },
+                        new { Id = "fb819bb4-b74e-419e-b70c-bb8666b6a978", DepartmentId = "1f1481fa-60d4-41f8-bb54-f3bcb1d0a4a2", FormEducation = 0, Name = "Визуальные коммуникации", PeriodOfStudy = "4 года", PlacesInfoId = "516b57e6-a922-4b19-b774-18f70aeef978", Year = 2016 },
+                        new { Id = "0ffbfbaa-c9f7-4b3d-bd4d-e74d32126e79", DepartmentId = "1f1481fa-60d4-41f8-bb54-f3bcb1d0a4a2", FormEducation = 0, Name = "Визуальные коммуникации", PeriodOfStudy = "4 года", PlacesInfoId = "516b57e6-a922-4b19-b774-18f70aeef978", Year = 2015 },
+                        new { Id = "93f0e4b2-3722-4aa5-a01c-b10826040298", DepartmentId = "1f1481fa-60d4-41f8-bb54-f3bcb1d0a4a2", FormEducation = 0, Name = "Танец и современная пластическая культура", PeriodOfStudy = "4 года", PlacesInfoId = "80eee3d9-3af9-4b95-b24d-9c05734e9bd6", Year = 2018 },
+                        new { Id = "509ce781-53f4-4102-8eb7-5e49e59cee38", DepartmentId = "1f1481fa-60d4-41f8-bb54-f3bcb1d0a4a2", FormEducation = 0, Name = "Танец и современная пластическая культура", PeriodOfStudy = "4 года", PlacesInfoId = "80eee3d9-3af9-4b95-b24d-9c05734e9bd6", Year = 2017 },
+                        new { Id = "4fd90ad1-84d0-4cbc-9ff4-ba8ca2e370ef", DepartmentId = "1f1481fa-60d4-41f8-bb54-f3bcb1d0a4a2", FormEducation = 0, Name = "Танец и современная пластическая культура", PeriodOfStudy = "4 года", PlacesInfoId = "80eee3d9-3af9-4b95-b24d-9c05734e9bd6", Year = 2016 },
+                        new { Id = "9ccab65b-e74b-4ee9-9413-c95817d8ad44", DepartmentId = "1f1481fa-60d4-41f8-bb54-f3bcb1d0a4a2", FormEducation = 0, Name = "Танец и современная пластическая культура", PeriodOfStudy = "4 года", PlacesInfoId = "80eee3d9-3af9-4b95-b24d-9c05734e9bd6", Year = 2015 },
+                        new { Id = "e094daff-0612-48c1-8fee-05c5576b054f", DepartmentId = "1f1481fa-60d4-41f8-bb54-f3bcb1d0a4a2", FormEducation = 0, Name = "Технологии управления в сфере культуры", PeriodOfStudy = "4 года", PlacesInfoId = "55a2159e-a762-40c4-a285-711c6a7176be", Year = 2018 },
+                        new { Id = "c550cdc0-3bb0-4b98-a739-c74e1fec9194", DepartmentId = "1f1481fa-60d4-41f8-bb54-f3bcb1d0a4a2", FormEducation = 0, Name = "Технологии управления в сфере культуры", PeriodOfStudy = "4 года", PlacesInfoId = "55a2159e-a762-40c4-a285-711c6a7176be", Year = 2017 },
+                        new { Id = "ce9b9260-e265-447e-9eab-07dec9b86e79", DepartmentId = "1f1481fa-60d4-41f8-bb54-f3bcb1d0a4a2", FormEducation = 0, Name = "Технологии управления в сфере культуры", PeriodOfStudy = "4 года", PlacesInfoId = "55a2159e-a762-40c4-a285-711c6a7176be", Year = 2016 },
+                        new { Id = "b536a032-adf8-4dc0-af15-3967407197f7", DepartmentId = "1f1481fa-60d4-41f8-bb54-f3bcb1d0a4a2", FormEducation = 0, Name = "Технологии управления в сфере культуры", PeriodOfStudy = "4 года", PlacesInfoId = "55a2159e-a762-40c4-a285-711c6a7176be", Year = 2015 },
+                        new { Id = "688e6bda-0ae2-48f4-b954-3cf235bf011e", DepartmentId = "1f1481fa-60d4-41f8-bb54-f3bcb1d0a4a2", FormEducation = 1, Name = "Технологии управления в сфере культуры", PeriodOfStudy = "5 лет", PlacesInfoId = "7f506e9f-e9cd-42c8-84ad-39a54a6741b4", Year = 2018 },
+                        new { Id = "93aac0fd-ef11-41d8-9c84-f781cdf5d1cf", DepartmentId = "1f1481fa-60d4-41f8-bb54-f3bcb1d0a4a2", FormEducation = 1, Name = "Технологии управления в сфере культуры", PeriodOfStudy = "5 лет", PlacesInfoId = "7f506e9f-e9cd-42c8-84ad-39a54a6741b4", Year = 2017 },
+                        new { Id = "fa1ac538-aa74-45c9-a12c-0b4ad9a659c3", DepartmentId = "1f1481fa-60d4-41f8-bb54-f3bcb1d0a4a2", FormEducation = 1, Name = "Технологии управления в сфере культуры", PeriodOfStudy = "5 лет", PlacesInfoId = "7f506e9f-e9cd-42c8-84ad-39a54a6741b4", Year = 2016 },
+                        new { Id = "efec1fc2-ad6e-4f15-8e43-48d8609e3245", DepartmentId = "1f1481fa-60d4-41f8-bb54-f3bcb1d0a4a2", FormEducation = 1, Name = "Технологии управления в сфере культуры", PeriodOfStudy = "5 лет", PlacesInfoId = "7f506e9f-e9cd-42c8-84ad-39a54a6741b4", Year = 2015 },
+                        new { Id = "3d3ad6c0-0871-4529-82d6-b1218dbb2639", DepartmentId = "1f1481fa-60d4-41f8-bb54-f3bcb1d0a4a2", FormEducation = 1, Name = "Технологии управления в сфере культуры", PeriodOfStudy = "5 лет", PlacesInfoId = "7f506e9f-e9cd-42c8-84ad-39a54a6741b4", Year = 2014 },
+                        new { Id = "d104302b-c0b8-4f47-8e0f-b05088462522", DepartmentId = "1f1481fa-60d4-41f8-bb54-f3bcb1d0a4a2", FormEducation = 1, Name = "Журналистика в области культуры", PeriodOfStudy = "5 лет", PlacesInfoId = "46cc84c2-4de6-41c8-9835-85fffa13a757", Year = 2018 },
+                        new { Id = "ffa3af29-24dc-4ca6-a822-227c27b439c0", DepartmentId = "1f1481fa-60d4-41f8-bb54-f3bcb1d0a4a2", FormEducation = 0, Name = "Журналистика в области культуры", PeriodOfStudy = "4 года", PlacesInfoId = "46cc84c2-4de6-41c8-9835-85fffa13a757", Year = 2016 },
+                        new { Id = "ba397c4f-ffcd-4732-80d2-9341e0594f3d", DepartmentId = "1f1481fa-60d4-41f8-bb54-f3bcb1d0a4a2", FormEducation = 0, Name = "Журналистика в области культуры", PeriodOfStudy = "4 года", PlacesInfoId = "46cc84c2-4de6-41c8-9835-85fffa13a757", Year = 2015 },
+                        new { Id = "930ac9b9-b456-4b04-9b35-249069efdf7c", DepartmentId = "1f1481fa-60d4-41f8-bb54-f3bcb1d0a4a2", FormEducation = 1, Name = "Арт и спорт маркетинг", PeriodOfStudy = "5 лет", PlacesInfoId = "ced5f569-7f68-4cf6-8e02-ee369e47fb5d", Year = 2018 },
+                        new { Id = "8b525331-ca8b-45a1-a110-b567d1a1790a", DepartmentId = "9a50f83e-6001-47e4-be57-8fb255d78ecb", FormEducation = 0, Name = "Цифровое искусство", PeriodOfStudy = "4 года", PlacesInfoId = "e736ff71-b872-4be0-bde2-dc1b67f72019", Year = 2018 },
+                        new { Id = "81cfefe5-8ce6-4228-9559-2e0f70f53ab6", DepartmentId = "9a50f83e-6001-47e4-be57-8fb255d78ecb", FormEducation = 0, Name = "Прикладная информатика в социально-культурной сфере", PeriodOfStudy = "4 года", PlacesInfoId = "49bfab10-7bf7-4488-b579-99b0f0dac132", Year = 2017 },
+                        new { Id = "910eb5fb-d821-48af-9361-4c6467c857e9", DepartmentId = "9a50f83e-6001-47e4-be57-8fb255d78ecb", FormEducation = 0, Name = "Прикладная информатика в социально-культурной сфере", PeriodOfStudy = "4 года", PlacesInfoId = "49bfab10-7bf7-4488-b579-99b0f0dac132", Year = 2016 },
+                        new { Id = "5c270abb-09b6-445d-8072-07ca6517748a", DepartmentId = "9a50f83e-6001-47e4-be57-8fb255d78ecb", FormEducation = 0, Name = "Прикладная информатика в социально-культурной сфере", PeriodOfStudy = "4 года", PlacesInfoId = "49bfab10-7bf7-4488-b579-99b0f0dac132", Year = 2015 }
+                    );
                 });
 
             modelBuilder.Entity("EACA_API.Models.Institute.Department", b =>
@@ -201,6 +238,11 @@ namespace EACAAPI.Migrations
                     b.HasIndex("FacultyId");
 
                     b.ToTable("Departments");
+
+                    b.HasData(
+                        new { Id = "1f1481fa-60d4-41f8-bb54-f3bcb1d0a4a2", Code = "50.03.01", FacultyId = "e7d6edc5-9927-45c8-8b78-ecbf629a31c8", Name = "Искусства и гуманитарные науки" },
+                        new { Id = "9a50f83e-6001-47e4-be57-8fb255d78ecb", Code = "09.03.03", FacultyId = "e7d6edc5-9927-45c8-8b78-ecbf629a31c8", Name = "Прикладная информатика" }
+                    );
                 });
 
             modelBuilder.Entity("EACA_API.Models.Institute.Enrollment", b =>
@@ -242,6 +284,10 @@ namespace EACAAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Faculties");
+
+                    b.HasData(
+                        new { Id = "e7d6edc5-9927-45c8-8b78-ecbf629a31c8", Name = "Творческих индустрий" }
+                    );
                 });
 
             modelBuilder.Entity("EACA_API.Models.Institute.Group", b =>
@@ -261,6 +307,34 @@ namespace EACAAPI.Migrations
                     b.HasIndex("CourseId");
 
                     b.ToTable("Groups");
+
+                    b.HasData(
+                        new { Id = "b6c351a5-9a0e-459d-840d-073642c69e4f", Active = true, CourseId = "c0701380-179d-4b9d-bdd8-07394deae025", Number = 123 },
+                        new { Id = "9bed449f-0d0e-4efc-bd96-9a256db68950", Active = true, CourseId = "9c29a9ca-6860-4e66-b9a6-b341bf67d620", Number = 223 },
+                        new { Id = "81bebd5d-426c-4322-adf9-19afb7fc1f3b", Active = true, CourseId = "fb819bb4-b74e-419e-b70c-bb8666b6a978", Number = 323 },
+                        new { Id = "9afbc88c-31eb-4908-b826-a9c2adcb96a9", Active = true, CourseId = "0ffbfbaa-c9f7-4b3d-bd4d-e74d32126e79", Number = 423 },
+                        new { Id = "97ae3d71-079b-432c-9e36-944b61f4ca63", Active = true, CourseId = "93f0e4b2-3722-4aa5-a01c-b10826040298", Number = 124 },
+                        new { Id = "dd805311-58c9-457e-8281-76a64b13a8d6", Active = true, CourseId = "509ce781-53f4-4102-8eb7-5e49e59cee38", Number = 224 },
+                        new { Id = "9a2fc5ef-11b9-48cf-af19-55262d5f7ee6", Active = true, CourseId = "4fd90ad1-84d0-4cbc-9ff4-ba8ca2e370ef", Number = 324 },
+                        new { Id = "ec86ea15-b8b8-4868-a92d-552cf68fcb88", Active = true, CourseId = "9ccab65b-e74b-4ee9-9413-c95817d8ad44", Number = 424 },
+                        new { Id = "670804e1-a7a5-4f75-8f4f-e75ea1211057", Active = true, CourseId = "e094daff-0612-48c1-8fee-05c5576b054f", Number = 121 },
+                        new { Id = "ea664bac-5b98-45b1-ac65-ebc4772005a6", Active = true, CourseId = "c550cdc0-3bb0-4b98-a739-c74e1fec9194", Number = 221 },
+                        new { Id = "d0ed5747-cc20-4e80-be1d-fa04e17ac27c", Active = true, CourseId = "ce9b9260-e265-447e-9eab-07dec9b86e79", Number = 321 },
+                        new { Id = "a923c3b3-39c9-487c-bf34-aa48a6b2ff12", Active = true, CourseId = "b536a032-adf8-4dc0-af15-3967407197f7", Number = 421 },
+                        new { Id = "96af68b1-6365-43d7-b231-24a00837a1cf", Active = true, CourseId = "688e6bda-0ae2-48f4-b954-3cf235bf011e", Number = 131 },
+                        new { Id = "14d9dd23-f28f-40de-b9a7-fb30c80992dc", Active = true, CourseId = "93aac0fd-ef11-41d8-9c84-f781cdf5d1cf", Number = 231 },
+                        new { Id = "fb753244-ea1f-4238-a7cc-69ba8a0640ab", Active = true, CourseId = "fa1ac538-aa74-45c9-a12c-0b4ad9a659c3", Number = 331 },
+                        new { Id = "aeb21cc7-86ad-43da-b6c8-897a210ee8e1", Active = true, CourseId = "efec1fc2-ad6e-4f15-8e43-48d8609e3245", Number = 431 },
+                        new { Id = "9f177c5e-de5c-4a3a-b585-6b708f891174", Active = true, CourseId = "3d3ad6c0-0871-4529-82d6-b1218dbb2639", Number = 531 },
+                        new { Id = "6cf90fd1-f616-4e49-8afd-6efc18a4e17f", Active = true, CourseId = "d104302b-c0b8-4f47-8e0f-b05088462522", Number = 134 },
+                        new { Id = "679dd170-705d-46d6-9bd3-06034e5b29e5", Active = true, CourseId = "ffa3af29-24dc-4ca6-a822-227c27b439c0", Number = 322 },
+                        new { Id = "9759ee00-07f1-4a99-8328-070d11983c29", Active = true, CourseId = "ba397c4f-ffcd-4732-80d2-9341e0594f3d", Number = 422 },
+                        new { Id = "89a3e2d0-9652-4545-915c-364d46d25a76", Active = true, CourseId = "930ac9b9-b456-4b04-9b35-249069efdf7c", Number = 133 },
+                        new { Id = "922d5911-e3e5-401d-b94f-680843558714", Active = true, CourseId = "8b525331-ca8b-45a1-a110-b567d1a1790a", Number = 126 },
+                        new { Id = "58f35aec-000d-414a-9204-165150dc7643", Active = true, CourseId = "81cfefe5-8ce6-4228-9559-2e0f70f53ab6", Number = 225 },
+                        new { Id = "e38c0ffd-fd30-441c-8ce5-d9131151f7a0", Active = true, CourseId = "910eb5fb-d821-48af-9361-4c6467c857e9", Number = 325 },
+                        new { Id = "d9c12db7-31fa-410a-8005-807e863de1de", Active = true, CourseId = "5c270abb-09b6-445d-8072-07ca6517748a", Number = 425 }
+                    );
                 });
 
             modelBuilder.Entity("EACA_API.Models.Institute.PlacesInfo", b =>
@@ -281,6 +355,17 @@ namespace EACAAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PlacesInfo");
+
+                    b.HasData(
+                        new { Id = "516b57e6-a922-4b19-b774-18f70aeef978", MainContestPlaces = 10, NotBudetPlaces = 6, SpecialQuotaPlaces = 2, TargetPlaces = 0 },
+                        new { Id = "80eee3d9-3af9-4b95-b24d-9c05734e9bd6", MainContestPlaces = 10, NotBudetPlaces = 6, SpecialQuotaPlaces = 2, TargetPlaces = 0 },
+                        new { Id = "55a2159e-a762-40c4-a285-711c6a7176be", MainContestPlaces = 10, NotBudetPlaces = 8, SpecialQuotaPlaces = 2, TargetPlaces = 2 },
+                        new { Id = "7f506e9f-e9cd-42c8-84ad-39a54a6741b4", MainContestPlaces = 9, NotBudetPlaces = 10, SpecialQuotaPlaces = 1, TargetPlaces = 8 },
+                        new { Id = "46cc84c2-4de6-41c8-9835-85fffa13a757", MainContestPlaces = 9, NotBudetPlaces = 5, SpecialQuotaPlaces = 1, TargetPlaces = 0 },
+                        new { Id = "ced5f569-7f68-4cf6-8e02-ee369e47fb5d", MainContestPlaces = 9, NotBudetPlaces = 5, SpecialQuotaPlaces = 1, TargetPlaces = 0 },
+                        new { Id = "e736ff71-b872-4be0-bde2-dc1b67f72019", MainContestPlaces = 9, NotBudetPlaces = 20, SpecialQuotaPlaces = 1, TargetPlaces = 0 },
+                        new { Id = "49bfab10-7bf7-4488-b579-99b0f0dac132", MainContestPlaces = 9, NotBudetPlaces = 20, SpecialQuotaPlaces = 1, TargetPlaces = 0 }
+                    );
                 });
 
             modelBuilder.Entity("EACA_API.Models.Institute.StudentGroup", b =>
@@ -289,13 +374,11 @@ namespace EACAAPI.Migrations
 
                     b.Property<string>("GroupId");
 
-                    b.Property<string>("Gradebook");
-
                     b.HasKey("StudentId", "GroupId");
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("StudentGroups");
+                    b.ToTable("StudentCourses");
                 });
 
             modelBuilder.Entity("EACA_API.Models.Institute.Subject", b =>
@@ -461,6 +544,10 @@ namespace EACAAPI.Migrations
                         .WithMany()
                         .HasForeignKey("ApiUserId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EACA_API.Models.Institute.Group")
+                        .WithMany("Students")
+                        .HasForeignKey("GroupId");
                 });
 
             modelBuilder.Entity("EACA_API.Models.AccountEntities.Tokens.RefreshToken", b =>
@@ -517,7 +604,7 @@ namespace EACAAPI.Migrations
             modelBuilder.Entity("EACA_API.Models.Institute.StudentGroup", b =>
                 {
                     b.HasOne("EACA_API.Models.Institute.Group", "Group")
-                        .WithMany("StudentGroups")
+                        .WithMany()
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade);
 

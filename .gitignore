@@ -1,0 +1,8 @@
+.vscode
+bin
+obj
+Properties
+
+appsettings.json
+client_secret.json
+EACA.csproj.user

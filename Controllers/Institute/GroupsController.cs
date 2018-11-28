@@ -25,7 +25,7 @@ namespace EACA_API.Controllers.Institute
         [HttpGet]
         public IEnumerable<Group> GetGroups()
         {
-            return _context.Groups;
+            return _context.Groups.Include(x => x.Course);
         }
 
         // GET: api/Groups/5
