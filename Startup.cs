@@ -26,7 +26,8 @@ using EACA_API.Controllers.ScheduleApi.Services;
 using FluentValidation.AspNetCore;
 using AutoMapper;
 using Swashbuckle.AspNetCore.Swagger;
-
+using EACA_API.Models.Email;
+using EACA_API.Services.EmailSender;
 
 namespace EACA_API
 {
@@ -55,9 +56,21 @@ namespace EACA_API
 
             // DI Custom
             services.AddSingleton<IScheduleService, ScheduleService>();
-            services.AddSingleton<IJwtFactory, JwtFactory>();
             services.TryAddSingleton<IItemRepository, ItemRepository>();
             services.TryAddTransient<IHttpContextAccessor, HttpContextAccessor>();
+
+            // Email Service 
+            var emailAppSettingOptions = Configuration.GetSection(nameof(EmailOptions));
+            services.Configure<EmailOptions>(options =>
+            {
+                options.Login = emailAppSettingOptions[nameof(EmailOptions.Login)];
+                options.Password = emailAppSettingOptions[nameof(EmailOptions.Password)];
+                options.Host = emailAppSettingOptions[nameof(EmailOptions.Host)];
+                options.Port = emailAppSettingOptions.GetValue<int>(nameof(EmailOptions.Port));
+                options.SSL = emailAppSettingOptions.GetValue<bool>(nameof(EmailOptions.SSL));
+            });
+
+            services.AddTransient<IEmailSender, EmailSender>();
 
             // JSON Web Token Authentication
             JWTServices(services);
@@ -75,6 +88,8 @@ namespace EACA_API
             builder.AddRoleManager<RoleManager<IdentityRole>>();
             builder.AddEntityFrameworkStores<ApplicationDbContext>();
             builder.AddDefaultTokenProviders();
+
+            services.AddSingleton<IJwtFactory, JwtFactory>();
 
             // AutoMapper
             services.AddAutoMapper();

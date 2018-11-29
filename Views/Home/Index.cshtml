@@ -1,43 +1,27 @@
 ﻿
-@{
-    Layout = null;
-}
 
-<!DOCTYPE html>
+<div class="container">
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
-    <title>Index</title>
-</head>
-<body>
-    <div class="container">
-
-        <h2 class="display-4">Вы зашли на API приложении ЕАСИ, мяу!</h2>
-        <div class="text-center">
-            <img src="https://steamusercontent-a.akamaihd.net/ugc/948461489839023228/B24C666D2DA77CA7D853F2F77C9250AA1F1ECF78/?interpolation=lanczos-none&output-format=jpeg&output-quality=95&fit=inside%7C268%3A268&composite-to=*,*%7C268%3A268&background-color=black" class="img-thumbnail"/>
-        </div>
-        <br />
-
-        <h3>Swagger:</h3>
-        
-        <p>Игровая площадка с апи <a href="/swagger">/swagger</a></p> 
-        <br />
-        <h3>Schedule API:</h3>
-        <p>Все данные отсылаются в <b>JSON</b> формате</p>
-        <p>Базовый URL: <code>/api/schedule</code></p>
-        <p>Получить текущую неделю: <a href="/api/schedule/getParityToday">/api/schedule/getParityToday</a></p>
-        <p>Получить полный список чётных\нечётных недель на текующий семестр: <a href="/api/schedule/getParityWeeks">/api/schedule/getParityWeeks</a></p>
-        <p>Получить список групп: <a href="/api/schedule/getGroupList">/api/schedule/getGroupList</a></p>
-        <p>Получить список пар на всю неделю: <a href="/api/schedule/even/321">/api/schedule/even/321</a> </p>
-        <p>Получить список пар на день для определённой группы: <a href="/api/schedule/odd/325/1">/api/schedule/odd/325/1</a></p>
-
-        <p class="lead">*even - чётная неделя </p>
-        <p class="lead">*odd - нечётная неделя</p>
-        <p class="lead">*0 - Понедельник, 1 - Вторник..., 5 - Суббота, на воскресение логики нет"</p>
+    <h2 class="display-4">Вы зашли на API приложении ЕАСИ, мяу!</h2>
+    <div class="text-center">
+        <img src="https://steamusercontent-a.akamaihd.net/ugc/948461489839023228/B24C666D2DA77CA7D853F2F77C9250AA1F1ECF78/?interpolation=lanczos-none&output-format=jpeg&output-quality=95&fit=inside%7C268%3A268&composite-to=*,*%7C268%3A268&background-color=black" class="img-thumbnail"/>
     </div>
+    <br />
 
-</body>
-</html>
+    <h3>Swagger:</h3>
+        
+    <p>Игровая площадка с апи <a href="/swagger">/swagger</a></p> 
+    <br />
+    <h3>Schedule API:</h3>
+    <p>Все данные отсылаются в <b>JSON</b> формате</p>
+    <p>Базовый URL: <code>/api/schedule</code></p>
+    <p>Получить текущую неделю: <a href="/api/schedule/getParityToday">/api/schedule/getParityToday</a></p>
+    <p>Получить полный список чётных\нечётных недель на текующий семестр: <a href="/api/schedule/getParityWeeks">/api/schedule/getParityWeeks</a></p>
+    <p>Получить список групп: <a href="/api/schedule/getGroupList">/api/schedule/getGroupList</a></p>
+    <p>Получить список пар на всю неделю: <a href="/api/schedule/even/321">/api/schedule/even/321</a> </p>
+    <p>Получить список пар на день для определённой группы: <a href="/api/schedule/odd/325/1">/api/schedule/odd/325/1</a></p>
+
+    <p class="lead">*even - чётная неделя </p>
+    <p class="lead">*odd - нечётная неделя</p>
+    <p class="lead">*0 - Понедельник, 1 - Вторник..., 5 - Суббота, на воскресение логики нет"</p>
+</div>

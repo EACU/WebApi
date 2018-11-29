@@ -11,6 +11,9 @@ using EACA_API.Helpers;
 using EACA_API.Models.Account;
 using Microsoft.EntityFrameworkCore;
 using EACA_API.Models.Institute;
+using EACA_API.Services.EmailSender;
+using EACA_API.Extensions;
+using System;
 
 namespace EACA_API.Controllers.Account
 {
@@ -18,15 +21,17 @@ namespace EACA_API.Controllers.Account
     [Route("api/account/[controller]/[action]")]
     public partial class RegisterController : Controller
     {
-        private readonly ApplicationDbContext _appDbContext;
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<ApiUser> _userManager;
         private readonly IMapper _mapper;
+        private readonly IEmailSender _emailSender;
 
-        public RegisterController(UserManager<ApiUser> userManager, IMapper mapper, ApplicationDbContext appDbContext)
+        public RegisterController(UserManager<ApiUser> userManager, IMapper mapper, ApplicationDbContext context, IEmailSender emailSender)
         {
             _userManager = userManager;
             _mapper = mapper;
-            _appDbContext = appDbContext;
+            _context = context;
+            _emailSender = emailSender;
         }
 
         /// <summary>
@@ -40,27 +45,33 @@ namespace EACA_API.Controllers.Account
         [HttpPost]
         public async Task<IActionResult> Student([FromBody]RegistrationStudentViewModel model)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
             var userIdentity = _mapper.Map<ApiUser>(model);
 
             var result = await _userManager.CreateAsync(userIdentity, model.Password);
 
-            if (!result.Succeeded) return BadRequest(Errors.AddIdentityErrorsToModelState(result, ModelState));
+            if (!result.Succeeded)
+                return BadRequest(Errors.AddIdentityErrorsToModelState(result, ModelState));
 
-            var group = await _appDbContext.Groups.SingleAsync(x => x.Number == model.Group);
+            var group = await _context.Groups.SingleAsync(x => x.Number == model.Group);
 
             if (group == null)
                 return BadRequest(Errors.AddErrorToModelState("group", "такой группы не существует", ModelState));
 
             await _userManager.AddToRoleAsync(userIdentity, Constants.Jwt.JwtRoles.ApiAccessStudent);
 
-            await _appDbContext.Students.AddAsync(new Student { ApiUserId = userIdentity.Id});
-            await _appDbContext.SaveChangesAsync();
+            await _context.Students.AddAsync(new Student { ApiUserId = userIdentity.Id});
+            await _context.SaveChangesAsync();
 
-            var student = await _appDbContext.Students.SingleAsync(x => x.ApiUserId == userIdentity.Id);
-            await _appDbContext.StudentGroups.AddAsync(new StudentGroup { StudentId = student.Id, GroupId = group.Id, Gradebook = model.Gradebook });
-            await _appDbContext.SaveChangesAsync();
+            var student = await _context.Students.SingleAsync(x => x.ApiUserId == userIdentity.Id);
+            await _context.StudentGroups.AddAsync(new StudentGroup { StudentId = student.Id, GroupId = group.Id, Gradebook = model.Gradebook });
+            await _context.SaveChangesAsync();
+
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(userIdentity);
+            var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = userIdentity.Id, code }, protocol: HttpContext.Request.Scheme);
+            await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
 
             return Ok($"Аккаунт {model.Email} успешно создан!");
         }
