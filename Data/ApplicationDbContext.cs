@@ -61,7 +61,6 @@ namespace EACA_API.Data
         /// <summary>
         /// Тестовые данные 
         /// </summary>
-        /// <param name="builder"></param>
         //private void InitializeDataBase(ModelBuilder builder)
         //{
         //    Faculty faculty1 = new Faculty { Id = GetGuid(), Name = "Творческих индустрий" };
